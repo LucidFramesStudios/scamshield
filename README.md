@@ -69,7 +69,7 @@ inconclusive │
 │  Sentence-Transformers embeddings · cosine similarity · local   │
 │  500+ verified scam pattern library · RAG retrieval             │
 │  Handles novel phrasing that rules and classifier miss          │
- 
+▼
 inconclusive │
  
 │  Layer 4 · LLM Reasoning                                        │
