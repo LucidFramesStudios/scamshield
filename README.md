@@ -83,7 +83,7 @@ flowchart TD
 
 In 2025, India received 32.4 Million cyber fraud complaints. 2.2 Billion Dollars lost.
 Digital arrest scams -where victims are held on continuous video calls by
-impersonators of CBI, TRAI, or RBI -averaged 1,654.23 US Dollar per victim.
+impersonators of CBI, TRAI, or RBI ~averaged 1,654.23 US Dollar per victim.
 
 Awareness campaigns exist. They don't work at the moment of manipulation.
 The intervention has to be real-time, on-device, and low-friction enough
@@ -179,7 +179,7 @@ False negative    : 0  (rate 0.0%)
 Trend accuracy    : 90.4%
 System health    : ✗ NEEDS WORK (<75% accuracy -review patches)
 
-**On the 74% accuracy figure**: This is adversarial accuracy -evaluated against
+**On the 74% accuracy figure**: This is adversarial accuracy, evaluated against
 synthetically hardened inputs designed to evade detection, not a representative
 field sample. The metric we optimise first is false negative rate (0.0%): a missed
 scam costs 1,654.23 US Dollar. A false alarm costs a two-minute verification call. That
@@ -244,13 +244,13 @@ ScamShield produces two artifacts per analysis:
 
 These are scoped, not speculative:
 
-1. **Local STT** -swap network-assisted transcription for Whisper Tiny; requires
+1. **Local STT** - swap network-assisted transcription for Whisper Tiny; requires
    no changes to the inference stack; estimated 2–3 days of integration work
-2. **Vision pipeline** -WhatsApp screenshot → OCR → analysis; Layer 1 already
+2. **Vision pipeline** - WhatsApp screenshot → OCR → analysis; Layer 1 already
    handles the text; input adapter needs building
-3. **I4C database sync** -daily pull from the national scam pattern repository;
+3. **I4C database sync** - daily pull from the national scam pattern repository;
    feeds Layer 3 vector store; straightforward ETL work
-4. **Backend deployment** -currently local; containerisation and cloud deployment
+4. **Backend deployment** - currently local; containerisation and cloud deployment
    is standard infrastructure work, not architecture work
 
 ---
