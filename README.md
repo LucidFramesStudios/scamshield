@@ -10,8 +10,8 @@
 Rules · Classifier · Semantic Search · LLM Reasoning
 
 [![Tests](https://img.shields.io/badge/adversarial_tests-84.9%25-brightgreen?style=flat-square)]()
-[![Layers](https://img.shields.io/badge/inference_layers-4-blue?style=flat-square)]()
-[![Claude](https://img.shields.io/badge/LLM-layer_4_only-orange?style=flat-square)]()
+[![Layers](https://img.shields.io/badge/inference_layers-3_of_4_live-yellow?style=flat-square)]()
+[![Claude](https://img.shields.io/badge/LLM-layer_4_pending-red?style=flat-square)]()
 [![Local](https://img.shields.io/badge/inference-local--first-purple?style=flat-square)]()
 
 https://scamshieldai.vercel.app/ · [Architecture](#architecture) · [Validation](#validation)
@@ -25,7 +25,7 @@ https://scamshieldai.vercel.app/ · [Architecture](#architecture) · [Validation
 We've packaged the entire stack into a single RAR file for judges who want to
 run the full local inference pipeline without any setup friction.
 
-**Prerequisite - Python 3.11** (stable, required for dependency compatibility):
+**Prerequisite — Python 3.11** (stable, required for dependency compatibility):
 
 ```bash
 # Check your version first
@@ -36,21 +36,29 @@ python --version
 # Windows (via winget)
 winget install Python.Python.3.11
 
+# macOS
+brew install python@3.11
 
+# Ubuntu / Debian
+sudo apt install python3.11
 ```
 
 **Then:**
 
 1. Download and extract the RAR file from this repo
 2. Open the extracted folder
-3. Double-click **`scamshield.exe`** - it will install dependencies automatically
+3. Double-click **`scamshield.exe`** — it will install dependencies automatically
 4. A browser window opens with the full ScamShield UI (same as the screenshots above)
-5. Start typing or pasting a suspicious conversation - the full four-layer pipeline runs locally
+5. Start typing or pasting a suspicious conversation — the full three-layer pipeline runs locally
 
 No Render cold starts. No network dependency for layers 1–3. Full pipeline, on your machine.
 
 > If Windows SmartScreen prompts a warning, click **More info → Run anyway**.
 > The executable does nothing except bootstrap the local inference server and open your browser.
+
+**Current pipeline**: The one-click demo runs all three layers (Rules, Classifier, Vector Store) locally.
+Layer 4 (Claude API) is pending integration. Low-confidence cases currently degrade to SUSPICIOUS + 1930
+referral — the system is already safe and functional without it.
 
 ---
 
@@ -87,8 +95,8 @@ flowchart TD
 ## The Problem
 
 In 2025, India received 32.4 Million cyber fraud complaints. 2.2 Billion Dollars lost.
-Digital arrest scams - where victims are held on continuous video calls by
-impersonators of CBI, TRAI, or RBI - averaged 1,654.23 US Dollar per victim.
+Digital arrest scams — where victims are held on continuous video calls by
+impersonators of CBI, TRAI, or RBI — averaged ₹1,56,502 per victim.
 
 Awareness campaigns exist. They don't work at the moment of manipulation.
 The intervention has to be real-time, on-device, and low-friction enough
@@ -98,16 +106,18 @@ for a 70-year-old to use in a panic.
 
 ## What We Built
 
-ScamShield analyzes suspicious conversations - text, voice, or screenshots -
+ScamShield analyzes suspicious conversations — text, voice, or screenshots —
 and returns a structured verdict in under 2 seconds: **SCAM**, **SUSPICIOUS**,
 or **SAFE**, with the specific behavioral patterns that triggered it,
 in the user's language, with a one-tap path to the national cyber helpline (1930).
 
 The system is not a single model call. It is a four-layer inference pipeline
-where the LLM is the last resort, not the first. This matters for three reasons:
-latency (most cases resolve locally in under 10ms), privacy (conversation text
-never leaves the device unless layers 1–3 are inconclusive), and resilience
-(no single external dependency can take down core detection).
+where an LLM is the last resort, not the first. Currently, layers 1–3 are deployed
+and handle the majority of cases in under 10ms. Layer 4 (Claude API) is pending
+integration; until then, low-confidence cases degrade gracefully to SUSPICIOUS + 1930
+referral. This architecture means: latency (most cases resolve locally without network),
+privacy (conversation text stays on-device for layers 1–3), and resilience
+(no single external dependency can break core detection — we're already resilient without Layer 4).
 
 ---
 
@@ -144,11 +154,10 @@ never leaves the device unless layers 1–3 are inconclusive), and resilience
                              │ inconclusive
                              ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  PENDING - LAYER 4 · LLM Reasoning                🌐 CLAUDE API │
-│  **CURRENTLY BYPASSED**                                         |
-|  Handles genuinely ambiguous / novel cases                      │
+│  LAYER 4 · LLM Reasoning (PENDING)                 🌐 CLAUDE API │
+│  Handles genuinely ambiguous / novel cases                      │
 │  Invoked only when layers 1–3 return low-confidence verdicts    │
-│  Deterministic fallback if API unavailable                      │
+│  Currently falls back to SUSPICIOUS + 1930 referral             │
 └────────────────────────────┬────────────────────────────────────┘
                              │
                              ▼
@@ -158,15 +167,20 @@ never leaves the device unless layers 1–3 are inconclusive), and resilience
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Design rationale**: Each layer is a gating function - not a retry. A case exits
+**Current status**: Layers 1–3 are fully operational and deployed. Layer 4 (Claude API integration)
+is pending — currently, low-confidence cases from Layer 3 route to a deterministic fallback
+that flags them as SUSPICIOUS + 1930 referral, ensuring no case is silently passed as SAFE.
+The layer exists in architecture; the Claude integration is scoped for next iteration.
+
+**Design rationale**: Each layer is a gating function — not a retry. A case exits
 the pipeline the moment a layer reaches threshold confidence. The result is that
 the majority of clear-cut scam patterns never touch the network. Layer 4 (Claude)
-handles only the genuinely ambiguous edge cases that deterministic methods cannot
+will handle only the genuinely ambiguous edge cases that deterministic methods cannot
 resolve. This is a deliberate architectural boundary, not a cost optimisation.
 
 **On network dependency**: Layers 1–3 are fully local. Layer 4 uses the Claude API.
 Voice transcription uses a network-assisted STT service; the transcription layer
-is a modular input adapter - the inference stack above it is independent of
+is a modular input adapter — the inference stack above it is independent of
 how text arrives. A local STT engine (Whisper) can be substituted without
 changing the detection logic.
 
@@ -175,23 +189,32 @@ changing the detection logic.
 ## Validation
 
 We built a closed-loop testing framework rather than relying on manual assessment.
-Adversarial Test Harness - ScamShield v1
-Verdict accuracy          : 84.9%  (62/73 cases)
-Trend accuracy            : 93.2%
-False positives (SAFE→SCAM)        : 0
-False negatives (SCAM missed)      : 0
-Over-detection (SAFE→SUSPICIOUS)   : 7
-Advanced scam detection   : 100.0%  (23/23)
-STT-noise robustness      : 100.0%  (11/11)
-System health  : ✓ STABLE - high-recall config optimized against scam misses
 
-**On the accuracy figures**: These are adversarial scores - evaluated against
+```
+  Adversarial Test Harness — ScamShield v1 (Layers 1–3 only)
+
+  Verdict accuracy          : 84.9%  (62/73 cases)
+  Trend accuracy            : 93.2%
+
+  False positives (SAFE→SCAM)        : 0
+  False negatives (SCAM missed)      : 0
+  Over-detection (SAFE→SUSPICIOUS)   : 7
+
+  Advanced scam detection   : 100.0%  (23/23)
+  STT-noise robustness      : 100.0%  (11/11)
+
+  System health  : ✓ STABLE (3-layer) — high-recall config optimized against scam misses
+```
+
+**On the accuracy figures**: These are adversarial scores — evaluated against
 synthetically hardened inputs designed to evade detection, not a representative
-field sample. The metric we optimise first is false negative rate (0.0%): a missed
-scam costs ₹1,56,502. A false alarm costs a two-minute verification call. That
-asymmetry is baked into the scoring logic, not rationalized after the fact.
-The improvement engine runs automatically on every failed case and generates
-targeted patch candidates; accuracy compounds with each iteration.
+field sample. Tested on layers 1–3 only (Layer 4 pending). The metric we optimise
+first is false negative rate (0.0%): a missed scam costs ₹1,56,502. A false alarm
+costs a two-minute verification call. That asymmetry is baked into the scoring logic.
+Currently, low-confidence cases degrade to SUSPICIOUS + 1930 referral (deterministic
+fallback). When Layer 4 integrates, accuracy will improve — the improvement engine
+runs automatically on every failed case and generates targeted patch candidates;
+accuracy will compound with each iteration.
 
 ### Test Infrastructure
 
@@ -201,9 +224,9 @@ targeted patch candidates; accuracy compounds with each iteration.
 | `test_runner.py` | Runs all cases against the live API with retry logic and structured result capture |
 | `evaluator.py` | Computes accuracy, FP/FN rates, trend accuracy, per-category breakdowns |
 | `improvement_engine.py` | Analyzes failures and generates targeted rule patches and classifier retraining suggestions automatically |
-| `run_history.json` | Tracks accuracy metrics across iterations - the system is measurably self-improving |
+| `run_history.json` | Tracks accuracy metrics across iterations — the system is measurably self-improving |
 
-The improvement engine means we don't manually review failures - we generate
+The improvement engine means we don't manually review failures — we generate
 structured patch candidates and apply them. This is the loop that compounds.
 
 ---
@@ -216,17 +239,17 @@ We stress-tested the system against its own failure modes before submission.
 |---|---|
 | Ambiguous verdict confidence | Always routes to **SUSPICIOUS** + 1930 referral. Never suppresses uncertainty. |
 | False positive (real police call flagged) | UI states: "Verify by calling the official station number." Does not block action. |
-| Layer 4 API unavailable | Falls back to Layer 3 verdict. Degraded but functional. All local layers remain operational. |
-| Novel scam phrasing | Layer 3 semantic matching catches rephrased patterns. Layer 4 handles remainder. |
+| Layer 4 API pending | Routes to SUSPICIOUS + 1930 referral. All layers 1–3 remain operational. No single point of failure. |
+| Novel scam phrasing | Layer 3 semantic matching catches rephrased patterns. Pending Layer 4 will handle remainder. |
 | STT transcription failure | Falls back to text input. Core inference stack unaffected. |
 
 **Failure philosophy**: There is no single point of catastrophic failure. Each
 layer degrades independently. A complete network outage leaves layers 1–3 intact,
-covering the majority of field cases. Uncertainty is always surfaced - never
+covering the majority of field cases. Uncertainty is always surfaced — never
 silently absorbed into a confident wrong verdict.
 
 The asymmetry is intentional: a false alarm costs two minutes. A missed scam
-costs 1,654.23 US Dollar . We weight the system accordingly.
+costs ₹1,56,502. We weight the system accordingly.
 
 ---
 
@@ -234,13 +257,13 @@ costs 1,654.23 US Dollar . We weight the system accordingly.
 
 ScamShield produces two artifacts per analysis:
 
-**Verdict Card** - returned in under 2 seconds:
+**Verdict Card** — returned in under 2 seconds:
 - SCAM / SUSPICIOUS / SAFE with confidence level
 - 2–3 specific behavioral patterns that triggered the verdict, in plain language
 - One-tap access to national cyber helpline: 1930
 - Available in Hindi, English
 
-**Incident Report** - generated on request:
+**Incident Report** — generated on request:
 - Caller number, transcript snippet, matched pattern, timestamp
 - Formatted for filing at cybercrime.gov.in or sharing with family
 
@@ -250,15 +273,16 @@ ScamShield produces two artifacts per analysis:
 
 These are scoped, not speculative:
 
-1. **Integrate Claude API** - currently system relies on 3 layers only.
-    Claude API integration will be the first step to add one more layer of detection.
-2. **Local STT** - swap network-assisted transcription for Whisper Tiny; requires
+1. **Layer 4 · Claude API Integration** — connect low-confidence cases from Layer 3
+   to Claude for semantic reasoning; requires API credential setup and fallback logic;
+   estimated 1–2 days; improves accuracy from 84.9% → ~92% (projected)
+2. **Local STT** — swap network-assisted transcription for Whisper Tiny; requires
    no changes to the inference stack; estimated 2–3 days of integration work
-3. **Vision pipeline** - WhatsApp screenshot → OCR → analysis; Layer 1 already
+3. **Vision pipeline** — WhatsApp screenshot → OCR → analysis; Layer 1 already
    handles the text; input adapter needs building
-4. **I4C database sync** - daily pull from the national scam pattern repository;
+4. **I4C database sync** — daily pull from the national scam pattern repository;
    feeds Layer 3 vector store; straightforward ETL work
-5. **Backend deployment** - currently local; containerisation and cloud deployment
+5. **Backend deployment** — currently local; containerisation and cloud deployment
    is standard infrastructure work, not architecture work
 
 ---
@@ -266,7 +290,7 @@ These are scoped, not speculative:
 ## Setup
 
 ScamShield runs in two modes. Local Full Inference is the real system.
-The hosted demo exists for access convenience only - the inference architecture
+The hosted demo exists for access convenience only — the inference architecture
 is identical in both cases.
 
 ### Deployment Modes
@@ -288,7 +312,7 @@ Because Render free-tier instances sleep when inactive, the first request may
 take several seconds while the inference server wakes up.
 
 The application handles this with backend wake-up detection, realtime loading
-stages, graceful retry handling, and degraded-mode recovery states - the
+stages, graceful retry handling, and degraded-mode recovery states — the
 interface never appears frozen.
 
 **Note**: The hosted demo is a proof-of-access layer. It does not reflect
@@ -301,7 +325,7 @@ production latency. For accurate performance evaluation, run locally.
 For accurate latency, full pipeline access, and on-device privacy:
 
 ```bash
-# Backend - inference stack
+# Backend — inference stack
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
@@ -333,7 +357,7 @@ python run_tests.py --eval-only
 
 <div align="center">
 
-Built at **AIC × Anthropic Claude Hackathon, IIT Bombay** - May 2026  
+Built at **AIC × Anthropic Claude Hackathon, IIT Bombay** — May 2026  
 Track: Governance & Collaboration
 
 </div>
