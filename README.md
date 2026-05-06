@@ -30,7 +30,7 @@ Rules · Classifier · Semantic Search · LLM Reasoning
 
 ## The Problem
 
-In 2025, India received 3.24 crore cyber fraud complaints. ₹22,495 crore lost.
+In 2025, India received 32.4 Million cyber fraud complaints. 2.2 Billion Dollars lost.
 Digital arrest scams — where victims are held on continuous video calls by
 impersonators of CBI, TRAI, or RBI — averaged ₹1,56,502 per victim.
 
@@ -158,9 +158,9 @@ ScamShield produces two artifacts per analysis:
 - SCAM / SUSPICIOUS / SAFE with confidence level
 - 2–3 specific behavioral patterns that triggered the verdict, in plain language
 - One-tap access to national cyber helpline: 1930
-- Available in Hindi, Marathi, English
+- Available in Hindi, English
 
-**Incident Report** (PDF) — generated on request:
+**Incident Report** — generated on request:
 - Caller number, transcript snippet, matched pattern, timestamp
 - Formatted for filing at cybercrime.gov.in or sharing with family
 
@@ -182,6 +182,54 @@ These are scoped, not speculative:
 ---
 
 ## Setup
+
+## Deployment Modes
+
+ScamShield currently supports two runtime modes:
+
+| Mode | Description |
+|---|---|
+| **Hosted Demo (Recommended)** | Frontend deployed on Vercel with backend hosted on Render free-tier infrastructure |
+| **Local Full Inference Mode** | Run frontend + backend locally for faster response times and unrestricted inference |
+
+### Hosted Demo
+
+Live frontend:
+https://scamshieldai.vercel.app/
+
+The public demo uses:
+- Vercel frontend hosting
+- Render free-tier backend
+- Cost-optimized infrastructure
+
+Because Render free-tier instances sleep when inactive, the first request may take several seconds while the inference server wakes up.
+
+The application now includes:
+- backend wake-up detection
+- realtime loading stages
+- graceful retry handling
+- degraded-mode recovery states
+
+to ensure the interface never appears frozen.
+
+---
+
+### Local Full Inference Mode (Recommended for judges / testing)
+
+For the best experience:
+- run the backend locally
+- switch the frontend API endpoint to localhost
+
+This removes:
+- Render cold starts
+- free-tier latency
+- backend sleep delays
+
+#### Step 1 — Start backend locally
+
+```bash
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
 
 ### Backend (local inference stack)
 ```bash
