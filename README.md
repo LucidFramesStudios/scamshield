@@ -136,4 +136,4 @@ Live demo: https://scamshieldai.vercel.app
 
 ---
 
-## Built in 24 hours at AIC × Anthropic Hackathon, IIT Bombay — May 2026 | Team Size : 1 Member
+## Built in 24 hours at AIC × Anthropic Hackathon, IIT Bombay - May 2026 | Team Size : 1 Member
