@@ -5,7 +5,7 @@ from typing import List, Optional
 from models import AnalyzeResponse
 import detector
 
-app = FastAPI(title="ScamShield Orchestrator v4 — Conversation-Aware")
+app = FastAPI(title="ScamShield Orchestrator v4 — Lite")
 
 app.add_middleware(
     CORSMiddleware,
@@ -15,22 +15,30 @@ app.add_middleware(
 )
 
 
+# ── Health check (Render uptime monitoring) ───────────────
+@app.get("/")
+def health():
+    return {"status": "ok"}
+
+
+@app.get("/health")
+def health_alt():
+    return {"status": "ok"}
+
+
 class Message(BaseModel):
     role: str = Field(..., pattern="^(me|other)$")
     text: str = Field(..., min_length=1)
 
 
 class AnalyzeRequest(BaseModel):
-    # Structured conversation mode (preferred)
     messages: Optional[List[Message]] = None
-    # Legacy flat-text fallback
     text: Optional[str] = None
 
 
 @app.post("/analyze", response_model=AnalyzeResponse)
 def analyze_endpoint(request: AnalyzeRequest):
     try:
-        # ── Structured conversation path ──────────────────
         if request.messages and len(request.messages) > 0:
             valid = [m for m in request.messages if m.text.strip()]
             if not valid:
@@ -44,7 +52,6 @@ def analyze_endpoint(request: AnalyzeRequest):
             result = detector.analyze_conversation(msgs)
             return AnalyzeResponse(**result)
 
-        # ── Legacy flat-text fallback ─────────────────────
         if request.text and request.text.strip():
             result = detector.analyze_text(request.text.strip())
             return AnalyzeResponse(**result)
@@ -57,10 +64,10 @@ def analyze_endpoint(request: AnalyzeRequest):
         )
 
     except Exception as e:
-        print(f"CRITICAL MAIN EVENT LOOP CRASH: {e}")
+        print(f"CRITICAL: {e}")
         return AnalyzeResponse(
             verdict="SAFE", confidence="LOW",
-            reasons=["Fatal system error."],
-            actions=["Restart orchestration backend."],
+            reasons=["System error occurred."],
+            actions=["Please try again."],
             provider="FAILSAFE"
         )

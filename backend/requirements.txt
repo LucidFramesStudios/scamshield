@@ -1,9 +1,6 @@
-fastapi
-uvicorn
-pydantic
-requests
-python-dotenv
-sentence-transformers
-numpy
-scikit-learn
-python-multipart
+fastapi==0.115.0
+uvicorn==0.30.6
+pydantic==2.9.2
+numpy==1.26.4
+scikit-learn==1.5.2
+python-multipart==0.0.12

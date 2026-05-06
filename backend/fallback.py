@@ -1,8 +1,6 @@
 import vector_store
 
+
 def analyze(text: str) -> dict:
-    """
-    Semantic Vector Search Engine (RAG Fallback)
-    Guaranteed deterministic sub-100ms failover.
-    """
+    """Vector fallback disabled in lite mode."""
     return vector_store.search(text)
