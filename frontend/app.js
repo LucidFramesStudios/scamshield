@@ -4,7 +4,7 @@
 //  behavioral explainability, full backward compatibility
 // ═══════════════════════════════════════════════════════════
 
-const API_URL = "http://localhost:8000/analyze";
+const API_URL = "https://scamshield-lbdq.onrender.com";
 
 // ── Tuning ────────────────────────────────────────────────
 const MIN_CHARS        = 8;
