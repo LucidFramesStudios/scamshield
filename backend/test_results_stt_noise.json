@@ -1,0 +1,301 @@
+{
+  "meta": {
+    "run_at": "2026-05-06T00:53:44.186120",
+    "api_url": "http://localhost:8000/analyze",
+    "total": 8,
+    "passed": 0,
+    "failed": 8,
+    "errors": 0,
+    "elapsed_s": 16.82
+  },
+  "results": [
+    {
+      "id": 34,
+      "name": "STT_phonetic_upi_bypass",
+      "category": "stt_noise",
+      "subcategory": "phonetic",
+      "explanation": "Phonetic spelling of UPI ('you pee eye'). Rule engine looks for \\bupi\\b which will not match. STT correction dict doesn't cover this variant.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.69 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.35 [rel=0.50, money=0.50, esc=0.00, emo=0.15, ano=0.50]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.69 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.35 [rel=0.50, money=0.50, esc=0.00, emo=0.15, ano=0.50]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 35,
+      "name": "STT_broken_grammar_otp_request",
+      "category": "stt_noise",
+      "subcategory": "broken_grammar",
+      "explanation": "Severely broken grammar with phonetic OTP variant ('otpee'). Rule \\botp\\b may not match 'otpee'.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.51 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.51 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 36,
+      "name": "STT_hinglish_threat",
+      "category": "stt_noise",
+      "subcategory": "hinglish",
+      "explanation": "Pure Hinglish threat: 'account will be closed, send money immediately or arrest'. HINGLISH_MAP maps 'turant' \u2192 'immediately' and 'paisa' \u2192 'money' but 'girftari' (arrest) and 'bhejo' (send) are unmapped.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.93 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.93 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 37,
+      "name": "STT_spaced_keyword_warrant",
+      "category": "stt_noise",
+      "subcategory": "phonetic",
+      "explanation": "STT-inserted spaces inside keywords: 'war rant' and 'bail able'. Regex \\bwarrant\\b and \\bnon.?bailable\\b won't match with spaces inserted.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.79 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.79 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 38,
+      "name": "STT_numeric_amount_obfuscated",
+      "category": "stt_noise",
+      "subcategory": "obfuscation",
+      "explanation": "Amount given as words not digits ('ten thousand'). Amount pattern regex looks for digit patterns. NEFT rule should still fire but amount won't be extracted.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.71 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.38 [rel=0.50, money=0.70, esc=0.00, emo=0.00, ano=0.50]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.71 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.38 [rel=0.50, money=0.70, esc=0.00, emo=0.00, ano=0.50]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 39,
+      "name": "STT_ips_phonetic_authority",
+      "category": "stt_noise",
+      "subcategory": "phonetic",
+      "explanation": "IPS officer claim spoken phonetically ('eye pee ess'). Authority claim detector looks for 'officer' (present) but not 'eye pee ess' = IPS variant.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Secrecy/isolation tactic: instructed not to inform others or hang up",
+        "One-sided conversation \u2014 no response from user recorded",
+        "Digital arrest threat detected",
+        "Forced call retention detected",
+        "Risk Scores \u2014 ML: 0.83 | Rules: 0.35 (eff: 0.35) | Vector: 0.00 | Conversation: 0.28 [rel=0.85, money=0.00, esc=0.00, emo=0.00, ano=0.45]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "Namaskar, I am officer from TRAI. Your number is being used by terrorists. We ar",
+          "This is Enforcement Directorate officer speaking. FEMA violation detected in you",
+          "This is TRAI officer. Your mobile number is going to be disconnected permanently",
+          "Digital arrest threat detected",
+          "Forced call retention detected"
+        ],
+        "reasons": [
+          "Caller claims to be a government/law-enforcement authority",
+          "Secrecy/isolation tactic: instructed not to inform others or hang up",
+          "One-sided conversation \u2014 no response from user recorded",
+          "Digital arrest threat detected",
+          "Forced call retention detected",
+          "Risk Scores \u2014 ML: 0.83 | Rules: 0.35 (eff: 0.35) | Vector: 0.00 | Conversation: 0.28 [rel=0.85, money=0.00, esc=0.00, emo=0.00, ano=0.45]"
+        ],
+        "actions": [
+          "Hang up immediately.",
+          "Do NOT send money or share OTP/PIN.",
+          "Call Cyber Crime Helpline: 1930",
+          "Block this number and report it."
+        ],
+        "provider": "RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 40,
+      "name": "STT_filler_words_diluted_scam",
+      "category": "stt_noise",
+      "subcategory": "filler",
+      "explanation": "Heavy filler injection around OTP + account + right now keywords. STT_FILLERS removes 'uh', 'um', 'like', 'basically' in preprocess. Remaining text should still be caught.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.86 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.16 [rel=0.50, money=0.00, esc=0.00, emo=0.15, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.86 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.16 [rel=0.50, money=0.00, esc=0.00, emo=0.15, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 41,
+      "name": "STT_unicode_lookalike_chars",
+      "category": "stt_noise",
+      "subcategory": "obfuscation",
+      "explanation": "Cyrillic lookalike characters substituted ('\u0430' for 'a', '\u0441' for 'c') and zero for 'o'. Regex won't match 'sh\u0430re' or '0TP'. Unicode normalization missing.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.79 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.79 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    }
+  ]
+}

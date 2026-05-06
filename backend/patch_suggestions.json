@@ -1,0 +1,123 @@
+[
+  {
+    "file": "detector.py",
+    "weakness": "FALSE_POSITIVE: friend/family money",
+    "confidence": "HIGH",
+    "issue": "score_anomaly() adds +0.40 for 'Unverified person requesting money with minimal relationship context' even when strong casual signals (bro/bhai/yaar/mate) are present in the same conversation. The anomaly scorer does not receive the relationship score as context, so it fires unconditionally whenever has_money=True and len(other_msgs)<=3. Fix: gate the anomaly bonus behind a relationship_score threshold so that conversations with established casual rapport are exempted.",
+    "test_cases": [
+      "FP_friend_casual_money",
+      "FP_friend_loan_repayment",
+      "FP_colleague_petty_cash",
+      "FP_splitting_restaurant_bill"
+    ],
+    "before": "    # Unknown person + money = core anomaly\n    if has_money and not knows_me and len(other_msgs) <= 3:\n        score += 0.40\n        reasons.append(\"Unverified person requesting money with minimal relationship context\")",
+    "after": "    # Unknown person + money = core anomaly\n    # PATCH: pass casual_hits into anomaly scorer so that well-established\n    # casual rapport suppresses the anomaly bonus.  We proxy casual_hits by\n    # re-running the casual signals pattern here (cheap single regex call).\n    _CASUAL_PROXY = re.compile(\n        r'\\b(bro|dude|hey|mate|buddy|yaar|pal|boss|man|bhai|friend)\\b', re.IGNORECASE\n    )\n    casual_proxy_hits = len(_CASUAL_PROXY.findall(other_text))\n    if has_money and not knows_me and len(other_msgs) <= 3 and casual_proxy_hits < 2:\n        score += 0.40\n        reasons.append(\"Unverified person requesting money with minimal relationship context\")\n    elif has_money and not knows_me and len(other_msgs) <= 3 and casual_proxy_hits >= 2:\n        # Casual relationship established \u2014 reduce to mild flag, not full anomaly\n        score += 0.10\n        reasons.append(\"Money request in casual context \u2014 low-risk familiarity signal\")"
+  },
+  {
+    "file": "detector.py",
+    "weakness": "FALSE_POSITIVE: legitimate bank alert",
+    "confidence": "HIGH",
+    "issue": "Genuine bank SMS messages contain 'immediately', account numbers, and money amounts that trigger rule and emotion scorers. The meta-indicator guard already handles 'if not done by you' and 'will never ask for' patterns, but the rule engine runs on 'other_only' text BEFORE meta suppression is checked. Fix: add more bank-legitimacy meta patterns and reduce the effective_rule_score multiplier for meta contexts from 0.6 to 0.3.",
+    "test_cases": [
+      "FP_real_bank_otp_alert",
+      "FP_real_bank_kyc_update",
+      "EDGE_otp_in_scam_awareness_message"
+    ],
+    "before": "META_INDICATORS = [\n    r'\\b(?:someone|they)\\s+tried\\s+to\\s+scam\\b',\n    r'\\b(?:don.t|do\\s+not|never)\\s+(?:fall\\s+for|share|give)\\b',\n    r'\\bit.s\\s+a\\s+scam\\b',\n    r'\\bscam\\s+(?:alert|warning|awareness)\\b',\n    r'\\breport\\s+(?:to|it|this)\\b',\n    r'\\b(?:fake|fraud)\\s+(?:call|message|text)\\b',\n    r'\\bif\\s+not\\s+(?:done\\s+by|initiated\\s+by)\\s+you\\b',\n    r'\\bwill\\s+never\\s+ask\\s+for\\b',\n    r'\\btraining\\s+(?:module|session|program)\\b',\n    r'\\bnews\\s+article\\b',\n    r'\\bauthorities\\s+(?:urge|warn|advise)\\b',\n    r'\\bnearest\\s+branch\\b',\n]",
+    "after": "META_INDICATORS = [\n    r'\\b(?:someone|they)\\s+tried\\s+to\\s+scam\\b',\n    r'\\b(?:don.t|do\\s+not|never)\\s+(?:fall\\s+for|share|give)\\b',\n    r'\\bit.s\\s+a\\s+scam\\b',\n    r'\\bscam\\s+(?:alert|warning|awareness)\\b',\n    r'\\breport\\s+(?:to|it|this)\\b',\n    r'\\b(?:fake|fraud)\\s+(?:call|message|text)\\b',\n    r'\\bif\\s+not\\s+(?:done\\s+by|initiated\\s+by)\\s+you\\b',\n    r'\\bwill\\s+never\\s+ask\\s+for\\b',\n    r'\\btraining\\s+(?:module|session|program)\\b',\n    r'\\bnews\\s+article\\b',\n    r'\\bauthorities\\s+(?:urge|warn|advise)\\b',\n    r'\\bnearest\\s+branch\\b',\n    # PATCH: add bank-legitimacy patterns for genuine alert SMS\n    r'\\bif\\s+(?:not\\s+)?(?:authorised|authorized)\\s+by\\s+you\\b',\n    r'\\bcall\\s+(?:our\\s+)?(?:helpline|toll.?free|1800)\\b',\n    r'\\bdo\\s+not\\s+share\\s+(?:otp|pin|password)\\s+with\\s+anyone\\b',\n    r'\\bwe\\s+(?:will\\s+)?never\\s+(?:call|ask)\\b',\n    r'\\bxxxx\\d{4}\\b',   # masked account number format used by real banks\n]"
+  },
+  {
+    "file": "detector.py",
+    "weakness": "STT_MISS: phonetic bypass",
+    "confidence": "HIGH",
+    "issue": "STT_CORRECTIONS dict covers common OCR misspellings but not phonetic expansions like 'you pee eye' (UPI), 'eye pee ess' (IPS), or 'war rant' (warrant). Fix: add phonetic multi-word patterns to STT_CORRECTIONS and add a phonetic normalization pass that collapses common spoken-form expansions before regex matching.",
+    "test_cases": [
+      "STT_phonetic_upi_bypass",
+      "STT_spaced_keyword_warrant",
+      "STT_ips_phonetic_authority"
+    ],
+    "before": "STT_CORRECTIONS = {\n    \"warant\": \"warrant\", \"arested\": \"arrested\", \"acount\": \"account\",\n    \"transfor\": \"transfer\", \"immediate lee\": \"immediately\",\n    \"dijital\": \"digital\", \"offcer\": \"officer\", \"depart meant\": \"department\",\n    \"very fi cation\": \"verification\", \"suspishus\": \"suspicious\",\n    \"prosessing\": \"processing\", \"crimnal\": \"criminal\",\n    \"athority\": \"authority\", \"pay meant\": \"payment\",\n    \"goverment\": \"government\", \"frodulent\": \"fraudulent\",\n    \"complience\": \"compliance\", \"investgation\": \"investigation\",\n    \"immidiately\": \"immediately\", \"immediatly\": \"immediately\",\n    \"acnt\": \"account\", \"trnsfr\": \"transfer\", \"mny\": \"money\",\n    \"numbr\": \"number\", \"paymt\": \"payment\", \"recieve\": \"receive\",\n    \"verifcation\": \"verification\",\n}",
+    "after": "STT_CORRECTIONS = {\n    \"warant\": \"warrant\", \"arested\": \"arrested\", \"acount\": \"account\",\n    \"transfor\": \"transfer\", \"immediate lee\": \"immediately\",\n    \"dijital\": \"digital\", \"offcer\": \"officer\", \"depart meant\": \"department\",\n    \"very fi cation\": \"verification\", \"suspishus\": \"suspicious\",\n    \"prosessing\": \"processing\", \"crimnal\": \"criminal\",\n    \"athority\": \"authority\", \"pay meant\": \"payment\",\n    \"goverment\": \"government\", \"frodulent\": \"fraudulent\",\n    \"complience\": \"compliance\", \"investgation\": \"investigation\",\n    \"immidiately\": \"immediately\", \"immediatly\": \"immediately\",\n    \"acnt\": \"account\", \"trnsfr\": \"transfer\", \"mny\": \"money\",\n    \"numbr\": \"number\", \"paymt\": \"payment\", \"recieve\": \"receive\",\n    \"verifcation\": \"verification\",\n    # PATCH: phonetic spoken-form expansions (STT artefacts)\n    \"you pee eye\": \"upi\",\n    \"you pee i\": \"upi\",\n    \"eye pee ess\": \"ips\",\n    \"eye p s\": \"ips\",\n    \"war rant\": \"warrant\",\n    \"war-rant\": \"warrant\",\n    \"non bail able\": \"non-bailable\",\n    \"non bailable\": \"non-bailable\",\n    \"otpee\": \"otp\",\n    \"o t p\": \"otp\",\n    \"girftari\": \"arrest\",\n    \"bhejo\": \"send\",\n    \"band ho jayega\": \"will be blocked\",\n}"
+  },
+  {
+    "file": "detector.py",
+    "weakness": "STT_MISS: Hinglish/regional language",
+    "confidence": "HIGH",
+    "issue": "HINGLISH_MAP maps only 8 common Hinglish words. Words like 'girftari' (arrest), 'bhejo' (send/transfer), 'band karo' (block/cancel), 'pareshaan' (distress), 'darr' (fear) remain untranslated and thus invisible to all regex detectors. Fix: expand HINGLISH_MAP with threat and money-related Hinglish vocabulary.",
+    "test_cases": [
+      "STT_hinglish_threat"
+    ],
+    "before": "HINGLISH_MAP = {\n    \"sirji\": \"sir\", \"kripya\": \"please\", \"turant\": \"immediately\",\n    \"paisa\": \"money\", \"suniye\": \"listen\", \"samjhiye\": \"understand\",\n    \"aapka\": \"your\", \"police wale\": \"police\",\n}",
+    "after": "HINGLISH_MAP = {\n    \"sirji\": \"sir\", \"kripya\": \"please\", \"turant\": \"immediately\",\n    \"paisa\": \"money\", \"suniye\": \"listen\", \"samjhiye\": \"understand\",\n    \"aapka\": \"your\", \"police wale\": \"police\",\n    # PATCH: expanded Hinglish threat/money vocabulary\n    \"paisa bhejo\": \"send money\",\n    \"paise bhejo\": \"send money\",\n    \"bhejo\": \"send\",\n    \"girftari\": \"arrest\",\n    \"giraftari\": \"arrest\",\n    \"band ho jayega\": \"will be blocked\",\n    \"band kar denge\": \"will block\",\n    \"gir ftari\": \"arrest\",\n    \"rupaye bhejo\": \"send rupees\",\n    \"abhi bhejo\": \"send immediately\",\n    \"khata\": \"account\",\n    \"khata band\": \"account blocked\",\n    \"nahi batana\": \"do not tell\",\n    \"darr\": \"fear\",\n    \"dhamki\": \"threat\",\n    \"kehra\": \"case\",\n    \"jama karo\": \"deposit\",\n    \"turant paisa\": \"send money immediately\",\n}"
+  },
+  {
+    "file": "detector.py",
+    "weakness": "STT_MISS: character obfuscation",
+    "confidence": "MEDIUM",
+    "issue": "The preprocess() function does not normalise Unicode lookalike characters (e.g. Cyrillic '\u0430' \\u0430 used in place of Latin 'a', or digit '0' replacing 'o'). Scammers exploit this to bypass regex matching. Fix: add a Unicode normalization step using unicodedata.normalize('NFKD') and an ASCII transliteration fallback before applying STT_CORRECTIONS.",
+    "test_cases": [
+      "STT_unicode_lookalike_chars"
+    ],
+    "before": "def preprocess(text: str) -> str:\n    text = text.lower().strip()\n    for wrong, right in STT_CORRECTIONS.items():\n        text = text.replace(wrong, right)",
+    "after": "def preprocess(text: str) -> str:\n    # PATCH: normalise Unicode lookalikes before any regex/dict matching\n    import unicodedata\n    # NFKD decomposition then re-encode as ASCII ignoring non-ASCII residue\n    text = unicodedata.normalize(\"NFKD\", text)\n    text = text.encode(\"ascii\", errors=\"ignore\").decode(\"ascii\")\n    # Also map common digit-for-letter substitutions used in obfuscation\n    _LEET = str.maketrans({\"0\": \"o\", \"1\": \"i\", \"3\": \"e\", \"4\": \"a\", \"@\": \"a\"})\n    # Only apply leet substitutions when followed by letters (avoid amounts)\n    import re as _re\n    text = _re.sub(r'(?<=[a-z])[013@]|[013@](?=[a-z])', lambda m: m.group().translate(_LEET), text)\n    text = text.lower().strip()\n    for wrong, right in STT_CORRECTIONS.items():\n        text = text.replace(wrong, right)"
+  },
+  {
+    "file": "detector.py",
+    "weakness": "SCAM_MISS: fake familiarity pattern",
+    "confidence": "HIGH",
+    "issue": "_FAKE_FAMILIARITY regex in score_anomaly() matches explicit prior-meeting claims ('we met', 'remember me') but misses vague event-based familiarity openers like 'we were at the same X event' or 'I think we know each other from Y' which are hallmarks of pig-butchering and romance scams. Fix: extend _FAKE_FAMILIARITY to cover event/platform-based familiarity claims.",
+    "test_cases": [
+      "SCAM_fake_familiarity_delayed_ask",
+      "SCAM_romantic_pig_butchering"
+    ],
+    "before": "_FAKE_FAMILIARITY = re.compile(\n    r'\\b(we\\s+met|remember\\s+me|you\\s+know\\s+me|we\\s+spoke\\s+before|'\n    r'i\\s+(?:called|messaged)\\s+you\\s+(?:before|earlier|last\\s+(?:week|month|time)))\\b',\n    re.IGNORECASE\n)",
+    "after": "_FAKE_FAMILIARITY = re.compile(\n    r'\\b(we\\s+met|remember\\s+me|you\\s+know\\s+me|we\\s+spoke\\s+before|'\n    r'i\\s+(?:called|messaged)\\s+you\\s+(?:before|earlier|last\\s+(?:week|month|time))|'\n    # PATCH: event/platform-based familiarity gambits\n    r'we\\s+(?:were\\s+)?(?:at|in)\\s+the\\s+same|'\n    r'i\\s+think\\s+we\\s+(?:know\\s+each\\s+other|met)|'\n    r'(?:saw|spotted|noticed)\\s+you\\s+(?:at|in)|'\n    r'connected\\s+(?:at|through|via)|'\n    r'mutual\\s+(?:friend|contact|connection)|'\n    r'(?:same\\s+(?:batch|college|company|event|conference|school))|'\n    r'i\\s+was\\s+(?:referred|introduced)\\s+(?:to\\s+you|by))\\b',\n    re.IGNORECASE\n)"
+  },
+  {
+    "file": "rules.py",
+    "weakness": "SCAM_MISS: corporate/invoice scam",
+    "confidence": "HIGH",
+    "issue": "rules.py has no patterns for business/invoice fraud vocabulary: 'overdue invoice', 'pending payment', 'wire transfer details', 'legal notice', 'service suspension'. These are core BEC (Business Email Compromise) signals that currently reach the model layer only (low weight). Fix: add targeted rules for corporate fraud patterns.",
+    "test_cases": [
+      "SCAM_corporate_invoice_fraud",
+      "SCAM_job_offer_registration_fee"
+    ],
+    "before": "RULES = [\n    (r'\\botp\\b',                              \"OTP sharing request detected\"),",
+    "after": "RULES = [\n    (r'\\botp\\b',                              \"OTP sharing request detected\"),\n    # PATCH: business/corporate fraud patterns\n    (r'\\boverdue\\s+(?:invoice|payment|amount)\\b',  \"Overdue invoice pressure tactic detected\"),\n    (r'\\bwire\\s+transfer\\s+details\\b',             \"Wire transfer details push detected\"),\n    (r'\\blegal\\s+notice\\b',                         \"Legal notice threat detected\"),\n    (r'\\bservice\\s+suspension\\b',                   \"Service suspension threat detected\"),\n    (r'\\bsecurity\\s+deposit\\b',                     \"Upfront security deposit demand detected\"),\n    (r'\\bregistration\\s+fee\\b',                     \"Fake registration fee detected\"),\n    (r'\\brefundable\\s+(?:deposit|fee|amount)\\b',    \"Fake refundable deposit scam detected\"),\n    (r'\\bshare\\s+(?:the\\s+)?screenshot\\b',         \"Screenshot sharing request detected\"),\n    (r'\\bpay\\s+(?:a\\s+)?(?:refundable|small)\\s+(?:fee|deposit|amount)\\b',\n                                                       \"Advance fee demand detected\"),"
+  },
+  {
+    "file": "detector.py",
+    "weakness": "SCAM_MISS: denial-as-amplifier",
+    "confidence": "HIGH",
+    "issue": "The `other_denies_scam` amplifier in analyze_conversation() references a variable `reasons` before it is defined in the SAFE branch path, which causes a NameError at runtime and silently falls back. Additionally the denial pattern only matches 'this is not a scam' and misses 'i am legitimate', 'trust me, this is real', 'it is not fraud' variants. Fix: broaden the denial regex and ensure conv_score amplification happens unconditionally before reasons list is built.",
+    "test_cases": [
+      "EDGE_scammer_denies_being_scammer"
+    ],
+    "before": "    other_denies_scam = bool(re.search(\n        r'\\b(this\\s+is\\s+not\\s+a\\s+scam|not\\s+fraud|trust\\s+me|i\\s+am\\s+legitimate)\\b',\n        other_only or \"\", re.IGNORECASE\n    ))",
+    "after": "    other_denies_scam = bool(re.search(\n        r'\\b('\n        r'this\\s+is\\s+not\\s+a\\s+scam|not\\s+(?:a\\s+)?fraud|'\n        r'trust\\s+me|i\\s+am\\s+legitimate|'\n        # PATCH: additional denial variants\n        r'i\\s+am\\s+(?:real|genuine|official|verified)|'\n        r'this\\s+is\\s+(?:real|genuine|official|legitimate)|'\n        r'it\\s+is\\s+not\\s+(?:fraud|fake|a\\s+scam)|'\n        r'don.t\\s+worry\\s+(?:it.s|this\\s+is)\\s+(?:safe|legitimate|real)|'\n        r'we\\s+are\\s+(?:a\\s+)?(?:real|official|genuine|registered)'\n        r')\\b',\n        other_only or \"\", re.IGNORECASE\n    ))"
+  },
+  {
+    "file": "detector.py",
+    "weakness": "BOUNDARY: authority without demand",
+    "confidence": "MEDIUM",
+    "issue": "score_relationship() adds +0.35 for any authority claim regardless of whether a financial demand or OTP request follows. This causes incomplete scam scripts (authority claim only, no demand) to score too high and real authority contacts (police requesting witness statement) to be over-flagged. Fix: halve the authority relationship score when no money or OTP signal is present in the same conversation.",
+    "test_cases": [
+      "BOUND_incomplete_authority_no_demand",
+      "EDGE_police_real_request_for_statement"
+    ],
+    "before": "    # Authority claims \u2192 high risk\n    if authority_hits >= 1:\n        score += 0.35\n        reasons.append(\"Caller claims to be a government/law-enforcement authority\")",
+    "after": "    # Authority claims \u2192 high risk \u2014 but only amplify fully when combined\n    # with money or OTP signals (detected later in pipeline via anomaly scorer).\n    # PATCH: use lighter weight when authority claim appears without demand context.\n    _HAS_DEMAND = re.compile(\n        r'\\b(otp|pin|cvv|upi|neft|rtgs|send|transfer|pay|deposit|wire|share)\\b',\n        re.IGNORECASE\n    )\n    authority_has_demand = bool(_HAS_DEMAND.search(other_text))\n    if authority_hits >= 1:\n        if authority_has_demand:\n            score += 0.35\n            reasons.append(\"Caller claims to be a government/law-enforcement authority\")\n        else:\n            score += 0.15\n            reasons.append(\"Authority language detected \u2014 monitoring for demand signals\")"
+  },
+  {
+    "file": "detector.py",
+    "weakness": "EVOLUTION: SAFE\u2192SCAM transition missed",
+    "confidence": "MEDIUM",
+    "issue": "compute_escalation() compares only the final two step-scores (delta = current \u2212 previous). In slow-ramp pig-butchering scams the delta between turn N-1 and N is modest even though the overall trajectory is strongly ESCALATING. Fix: also compare the earliest and latest step scores (global delta) and use max(local_delta, global_delta/2) as the classification signal so long-horizon escalation is not missed.",
+    "test_cases": [
+      "EVO_safe_to_scam_gradual",
+      "SCAM_fake_familiarity_delayed_ask"
+    ],
+    "before": "    scores  = [_quick_risk_score(messages[:i + 1]) for i in range(n)]\n    current = scores[-1]\n    prev    = scores[-2]\n    delta   = current - prev\n\n    if delta > 0.15:\n        trend = \"ESCALATING\"\n    elif delta < -0.15:\n        trend = \"DE-ESCALATING\"\n    else:\n        trend = \"STABLE\" ",
+    "after": "    scores  = [_quick_risk_score(messages[:i + 1]) for i in range(n)]\n    current = scores[-1]\n    prev    = scores[-2]\n    local_delta  = current - prev\n    # PATCH: also measure global trajectory (first \u2192 last) to catch slow ramps\n    global_delta = scores[-1] - scores[0]\n    # Use whichever signal is stronger, but weight global at 50%\n    delta = max(local_delta, global_delta * 0.5)\n\n    if delta > 0.15:\n        trend = \"ESCALATING\"\n    elif delta < -0.15:\n        trend = \"DE-ESCALATING\"\n    else:\n        trend = \"STABLE\" "
+  }
+]

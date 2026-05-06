@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ScamShield — Real-Time Scam Interruption</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ── Analysis Panel (persistent left sidebar) ────────── -->
+    <div id="analysis-panel" class="analysis-panel">
+        <div class="ap-idle">
+            <div class="ap-idle-icon">🛡️</div>
+            <p>Awaiting conversation…</p>
+        </div>
+    </div>
+
+    <!-- ── App Main ─────────────────────────────────────────── -->
+    <div class="app-main">
+
+    <!-- ── Shader background ────────────────────────────────── -->
+    <canvas id="shield-canvas"></canvas>
+
+    <!-- ── Header ──────────────────────────────────────────── -->
+    <header id="app-header">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="shield-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <h1>ScamShield</h1>
+                    <p class="subtitle">Real-Time Scam Interceptor</p>
+                </div>
+            </div>
+            <button id="btn-reset" class="header-btn" title="Reset session">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"/>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                </svg>
+            </button>
+        </div>
+        <!-- ── Verdict Strip ──────────────────────────────── -->
+        <div id="verdict-strip" class="verdict-strip hidden"></div>
+    </header>
+
+    <!-- ── Chat Area ───────────────────────────────────────── -->
+    <main id="chat-area" class="chat-area">
+        <div id="chat-messages" class="chat-messages">
+            <div id="empty-state" class="empty-state">
+                <div class="empty-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <p class="empty-title">Start a Conversation</p>
+                <p class="empty-desc">Type or speak as either party.<br>ScamShield analyses the full conversation in real time.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── Result Panel (expandable) ───────────────────────── -->
+    <div id="result-overlay" class="result-overlay hidden" role="dialog">
+        <div class="result-backdrop" id="result-backdrop"></div>
+        <div id="result-panel" class="result-panel"></div>
+    </div>
+
+    <!-- ── Input Dock ──────────────────────────────────────── -->
+    <footer id="input-dock" class="input-dock">
+        <!-- Speaker toggle bar -->
+        <div class="speaker-bar">
+            <span id="speaker-label" class="speaker-label">Speaking as <strong>Other Person</strong></span>
+            <div class="speaker-toggle" id="speaker-toggle">
+                <button class="role-btn active" data-role="other">
+                    <span class="role-dot other-dot"></span>Other
+                </button>
+                <button class="role-btn" data-role="me">
+                    <span class="role-dot me-dot"></span>Me
+                </button>
+            </div>
+        </div>
+
+        <!-- Speech status -->
+        <div id="speech-status" class="speech-status hidden"></div>
+
+        <!-- Input row -->
+        <div class="input-row">
+            <div class="input-wrapper">
+                <textarea
+                    id="inputText"
+                    rows="1"
+                    placeholder="Type a message…"
+                    autocomplete="off"
+                    spellcheck="true"
+                ></textarea>
+            </div>
+
+            <button id="btn-send" class="dock-btn send-btn" title="Send message">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+            </button>
+
+            <button id="btn-mic" class="dock-btn mic-btn" title="Start speaking">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    <line x1="12" y1="19" x2="12" y2="23"/>
+                    <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+            </button>
+
+            <button id="btn-stop" class="dock-btn stop-btn hidden" title="Stop listening">
+                <div class="stop-pulse"></div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="6" y="6" width="12" height="12" rx="2"/>
+                </svg>
+            </button>
+        </div>
+    </footer>
+
+     </div><!-- /.app-main -->
+
+    <script src="app.js"></script>
+</body>
+</html>
