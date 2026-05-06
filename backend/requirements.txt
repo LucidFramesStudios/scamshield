@@ -3,6 +3,7 @@ uvicorn
 pydantic
 requests
 python-dotenv
+sentence-transformers
 numpy
 scikit-learn
 python-multipart
