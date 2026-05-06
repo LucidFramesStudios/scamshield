@@ -25,7 +25,17 @@ _vs_lock = threading.Lock()
 
 
 def _get_vs():
-    return None
+    global _vs
+    if _vs is None:
+        with _vs_lock:
+            if _vs is None:
+                try:
+                    import vector_store as _vs_mod
+                    _vs = _vs_mod
+                except Exception as e:
+                    print(f"[VECTOR] Unavailable: {e}")
+                    _vs = False
+    return _vs if _vs else None
 
 
 # ── 2. ML Model Thread-Safe Loading ──────────────────────
