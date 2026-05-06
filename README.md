@@ -26,20 +26,15 @@ This is not a chatbot wrapper. The LLM is layer four.
 
 ## Architecture
 Text / Voice Input
-│
-▼
+
 [1] Rules Engine         local  · <10ms  · no network required
-│
-▼
+
 [2] ML Classifier        local  · Hinglish-normalized · STT-corrected
-│
-▼
+
 [3] Vector Store (RAG)   local  · semantic matching · 500+ verified patterns
-│
-▼
+
 [4] LLM Reasoning        Claude API · handles novel / ambiguous cases
-│
-▼
+
 Verdict Card + Incident Report
 
 Each layer has a deterministic fallback. The first three layers operate without
