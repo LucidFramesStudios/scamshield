@@ -1,6 +1,10 @@
 markdown<div align="center">
 
 # ScamShield
+<img width="491" height="742" alt="image" src="https://github.com/user-attachments/assets/51759775-4199-4644-ba9a-856b38b8dab4" />
+<img width="505" height="796" alt="image" src="https://github.com/user-attachments/assets/7e69f305-dc74-4db3-9a48-3c5261353437" />
+<img width="712" height="730" alt="image" src="https://github.com/user-attachments/assets/7a8903cc-f9b7-4a99-83d3-cf57270d3b04" />
+
 
 **Real-time scam interruption via layered inference.**  
 Rules · Classifier · Semantic Search · LLM Reasoning
@@ -10,13 +14,17 @@ Rules · Classifier · Semantic Search · LLM Reasoning
 [![Claude](https://img.shields.io/badge/LLM-layer_4_only-orange?style=flat-square)]()
 [![Local](https://img.shields.io/badge/inference-local--first-purple?style=flat-square)]()
 
-[Live Demo](your-vercel-url) · [Architecture](#architecture) · [Validation](#validation)
+[Live Demo ]https://scamshieldai.vercel.app/ · [Architecture](#architecture) · [Validation](#validation)
 
 </div>
 
 ---
 
-![ScamShield verdict card — SCAM detected with three reasons and 1930 helpline button](docs/verdict-card.png)
+ 
+
+
+
+
 
 ---
 
@@ -55,6 +63,7 @@ Input  ────────────────────────�
 │  fake FIR formats, digital arrest terminology                   │
  
 inconclusive │
+
 ▼
  
 │  Layer 2 · ML Classifier                                        │
@@ -63,13 +72,16 @@ inconclusive │
 │  Trained on adversarial + synthetic corpus                      │
  
 inconclusive │
+
 ▼
  
 │  Layer 3 · Semantic Vector Store                                │
 │  Sentence-Transformers embeddings · cosine similarity · local   │
 │  500+ verified scam pattern library · RAG retrieval             │
 │  Handles novel phrasing that rules and classifier miss          │
+
 ▼
+
 inconclusive │
  
 │  Layer 4 · LLM Reasoning                                        │
@@ -78,7 +90,10 @@ inconclusive │
 │  Has deterministic fallback if API unavailable                  │
  
 │
+
 ▼
+
+
 Structured verdict + Incident Report
 
 **On network dependency**: Layers 1–3 are fully local. Layer 4 uses the Claude API.
