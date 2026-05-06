@@ -1,4 +1,5 @@
-markdown<div align="center">
+ 
+<div align="center">
 
 # ScamShield
 <img width="491" height="742" alt="image" src="https://github.com/user-attachments/assets/51759775-4199-4644-ba9a-856b38b8dab4" />
