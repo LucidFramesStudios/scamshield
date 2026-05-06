@@ -48,14 +48,6 @@ let lastResult        = null;
 let isAnalyzing       = false;
 let interimRowEl      = null;
 
-// ── Boot / Connection State ───────────────────────────────
-// Tracks whether the backend has responded to /health.
-// Input is locked until this is true.
-let backendReady    = false;
-let bootAttempts    = 0;
-const MAX_BOOT_RETRIES = 3;
-const HEALTH_URL    = API_URL.replace("/analyze", "/health");
-
 // ═══════════════════════════════════════════════════════════
 //  SPEAKER TOGGLE
 // ═══════════════════════════════════════════════════════════
@@ -70,157 +62,6 @@ $speakerToggle.addEventListener("click", (e) => {
     $speakerToggle.querySelectorAll(".role-btn").forEach(b => {
         b.classList.toggle("active", b.dataset.role === role);
     });
-
-    // ═══════════════════════════════════════════════════════════
-//  SYSTEM BOOT — Backend wake-up detection & overlay
-//
-//  WHY: Render free tier cold-starts take 10-25s. Without
-//  feedback the app looks frozen. These stages give users a
-//  accurate, believable narrative of what is happening.
-// ═══════════════════════════════════════════════════════════
-
-const BOOT_STAGES = [
-    "Waking secure inference server…",
-    "Initializing detection engine…",
-    "Loading fraud intelligence models…",
-    "Connecting to realtime analysis pipeline…",
-    "ScamShield ready.",
-];
-
-const $bootOverlay  = document.getElementById("system-boot-overlay");
-const $bootStages   = document.getElementById("boot-stages");
-const $bootProgress = document.getElementById("boot-progress");
-const $bootError    = document.getElementById("boot-error");
-const $bootErrorMsg = document.getElementById("boot-error-msg");
-const $bootRetryBtn = document.getElementById("boot-retry-btn");
-const $apReadyBadge = document.getElementById("ap-ready-badge");
-const $inputDock    = document.getElementById("input-dock");
-
-/** Build stage DOM — kept in JS so copy/stages can be tuned without touching HTML */
-function renderBootStages() {
-    $bootStages.innerHTML = BOOT_STAGES.map((label, i) =>
-        `<div class="boot-stage" id="boot-stage-${i}">
-            <div class="boot-stage-dot"></div>
-            <span>${label}</span>
-         </div>`
-    ).join("");
-}
-
-/** Advance the stage indicator and progress bar */
-function setBootStage(index) {
-    BOOT_STAGES.forEach((_, i) => {
-        const el = document.getElementById(`boot-stage-${i}`);
-        if (!el) return;
-        el.classList.remove("active", "done");
-        if (i < index)       el.classList.add("done");
-        else if (i === index) el.classList.add("active");
-    });
-    const pct = Math.round((index / (BOOT_STAGES.length - 1)) * 100);
-    $bootProgress.style.width = Math.min(100, pct) + "%";
-}
-
-/** Lock all input during boot so users don't hit silent errors */
-function lockDock() {
-    $inputDock.classList.add("dock-locked");
-    $inputDock.classList.remove("dock-unlocked");
-}
-
-/** Unlock and announce readiness */
-function unlockDock() {
-    $inputDock.classList.remove("dock-locked");
-    $inputDock.classList.add("dock-unlocked");
-}
-
-function bootDelay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-/**
- * Main boot sequence.
- * Ping /health, animate stages while waiting,
- * complete or show recovery state.
- */
-async function initBootSequence() {
-    renderBootStages();
-    lockDock();
-    $bootOverlay.classList.remove("boot-fading");
-    $bootError.classList.remove("visible");
-
-    // Start progressive stage animation immediately —
-    // these run in parallel with the real health ping.
-    // Even if backend responds in 2s, users see at least 2 stages.
-    setBootStage(0);
-    const t1 = setTimeout(() => setBootStage(1), 1400);
-    const t2 = setTimeout(() => setBootStage(2), 3000);
-    const t3 = setTimeout(() => setBootStage(3), 5000);
-
-    try {
-        // Render free tier can take up to 25s — set generous timeout
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 27000);
-
-        const res = await fetch(HEALTH_URL, {
-            method: "GET",
-            signal: controller.signal,
-        });
-        clearTimeout(timeout);
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        // Health confirmed — finish the animation cleanly
-        clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
-        setBootStage(BOOT_STAGES.length - 1);
-        $bootProgress.style.width = "100%";
-
-        // Brief pause so user reads "ScamShield ready."
-        await bootDelay(750);
-        completeBootSequence();
-
-    } catch (err) {
-        clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
-        bootAttempts++;
-        console.error("[BOOT] Health check failed:", err.message);
-
-        if (bootAttempts < MAX_BOOT_RETRIES) {
-            // Auto-retry: show message, wait, retry silently
-            $bootErrorMsg.textContent = "Secure analysis node unavailable.\nRetrying connection…";
-            $bootError.classList.add("visible");
-            await bootDelay(4000);
-            $bootError.classList.remove("visible");
-            initBootSequence();
-        } else {
-            // Max retries hit — show manual retry button
-            $bootErrorMsg.textContent = "Secure analysis node unavailable.\nManual retry required.";
-            $bootError.classList.add("visible");
-        }
-    }
-}
-
-/** Called when backend confirms healthy. Dissolves overlay, activates UI. */
-function completeBootSequence() {
-    backendReady = true;
-
-    // Fade overlay out then remove from layout
-    $bootOverlay.classList.add("boot-fading");
-    setTimeout(() => { $bootOverlay.style.display = "none"; }, 600);
-
-    // Unlock input
-    unlockDock();
-
-    // Activate the persistent ready badge in the analysis panel
-    if ($apReadyBadge) {
-        $apReadyBadge.classList.add("visible");
-    }
-
-    console.log("[BOOT] Backend ready. Input unlocked.");
-}
-
-// Manual retry button
-$bootRetryBtn.addEventListener("click", () => {
-    bootAttempts = 0;
-    $bootError.classList.remove("visible");
-    initBootSequence();
-});
 
     const label = role === "me" ? "Me" : "Other Person";
     $speakerLabel.innerHTML = `Speaking as <strong>${label}</strong>`;
@@ -399,54 +240,22 @@ function removeInterimBubble() {
 // ── Analyzing indicator ───────────────────────────────────
 let analyzingEl = null;
 
-// ── Analysis phase copy — rotates to show the system is working
-const ANALYZE_PHASES = [
-    "Analyzing behavioral patterns…",
-    "Cross-checking scam indicators…",
-    "Running conversation risk analysis…",
-    "Evaluating linguistic markers…",
-    "Assessing threat confidence…",
-];
-
-let phaseInterval   = null;
-let currentPhaseIdx = 0;
-
 function showAnalyzingIndicator() {
     removeAnalyzingIndicator();
     analyzingEl = document.createElement("div");
     analyzingEl.className = "msg-analyzing";
-
-    const dotsEl = document.createElement("div");
-    dotsEl.className = "analyzing-dots";
-    dotsEl.innerHTML = "<span></span><span></span><span></span>";
-
-    // Phase label — rotates every 1.6s so every second of latency
-    // feels like progress, not a freeze.
-    const phaseEl = document.createElement("span");
-    phaseEl.className = "analyzing-phase";
-    phaseEl.textContent = ANALYZE_PHASES[0];
-    currentPhaseIdx = 0;
-
-    analyzingEl.appendChild(dotsEl);
-    analyzingEl.appendChild(phaseEl);
+    analyzingEl.innerHTML = `
+        <div class="analyzing-dots"><span></span><span></span><span></span></div>
+        Analyzing conversation
+    `;
     $messages.appendChild(analyzingEl);
     scrollToBottom();
-
-    phaseInterval = setInterval(() => {
-        currentPhaseIdx = (currentPhaseIdx + 1) % ANALYZE_PHASES.length;
-        if (phaseEl && phaseEl.parentNode) {
-            phaseEl.style.opacity = "0";
-            setTimeout(() => {
-                phaseEl.textContent = ANALYZE_PHASES[currentPhaseIdx];
-                phaseEl.style.opacity = "0.75";
-            }, 220);
-        }
-    }, 1600);
 }
 
 function removeAnalyzingIndicator() {
-    if (phaseInterval) { clearInterval(phaseInterval); phaseInterval = null; }
-    if (analyzingEl && analyzingEl.parentNode) analyzingEl.remove();
+    if (analyzingEl && analyzingEl.parentNode) {
+        analyzingEl.remove();
+    }
     analyzingEl = null;
 }
 
@@ -474,7 +283,6 @@ function initRecognition() {
         isListening = true;
         $btnMic.classList.add("hidden");
         $btnStop.classList.remove("hidden");
-        $btnStop.classList.add("listening"); // accent glow on stop btn
         showSpeechStatus("🎙 Listening… speak now");
     };
 
@@ -500,15 +308,12 @@ function initRecognition() {
         const display = (speechBuffer + interimText).trim();
         if (display) showInterimBubble(display);
 
-       clearTimeout(silenceTimer);
-        resetSilenceCountdown(); // restart ring on new speech
+        clearTimeout(silenceTimer);
         showSpeechStatus("🎙 Speech detected…");
 
         silenceTimer = setTimeout(() => {
             handleSilence();
         }, SILENCE_TIMEOUT);
-        // Small RAF delay ensures CSS reset lands before animation starts
-        requestAnimationFrame(() => startSilenceCountdown());
     };
 
     recognition.onerror = (event) => {
@@ -598,7 +403,6 @@ function startListening() {
 function stopListening() {
     isListening = false;
     clearTimeout(silenceTimer);
-    resetSilenceCountdown(); // clear ring on manual stop
     $btnStop.classList.add("hidden");
     $btnMic.classList.remove("hidden");
     hideSpeechStatus();
@@ -619,41 +423,10 @@ function hideSpeechStatus() {
 }
 
 
-// ── Silence countdown ring ────────────────────────────────
-// Visual countdown that drains exactly as the 4s silence
-// timer runs. Eliminates "did it hear me?" uncertainty.
-const $silenceRing   = document.getElementById("silence-ring");
-const $silenceCircle = $silenceRing ? $silenceRing.querySelector("circle") : null;
-const RING_CIRCUM    = 145; // matches stroke-dasharray in CSS (2π × ~23px)
-
-function startSilenceCountdown() {
-    if (!$silenceRing || !$silenceCircle) return;
-    // Reset instantly, then animate to 0 over SILENCE_TIMEOUT ms
-    $silenceCircle.style.transition = "none";
-    $silenceCircle.style.strokeDashoffset = RING_CIRCUM;
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            $silenceCircle.style.transition = `stroke-dashoffset ${SILENCE_TIMEOUT}ms linear`;
-            $silenceCircle.style.strokeDashoffset = "0";
-            $silenceRing.classList.add("visible");
-        });
-    });
-}
-
-function resetSilenceCountdown() {
-    if (!$silenceRing || !$silenceCircle) return;
-    $silenceRing.classList.remove("visible");
-    $silenceCircle.style.transition = "none";
-    $silenceCircle.style.strokeDashoffset = RING_CIRCUM;
-}
-
 // ═══════════════════════════════════════════════════════════
 //  API — ANALYZE FULL CONVERSATION (v4: structured payload)
 // ═══════════════════════════════════════════════════════════
 async function analyzeConversation() {
-    // Don't fire while backend is still waking up — dock is locked
-    // but this guards against any race conditions.
-    if (!backendReady) return;
     if (conversation.length === 0) return;
     if (isAnalyzing) return;
 
@@ -697,24 +470,12 @@ async function analyzeConversation() {
     } catch (err) {
         console.error("[API] Error:", err);
         removeAnalyzingIndicator();
-
-        const isNetworkErr = err.message.includes("Failed to fetch") ||
-                             err.message.includes("NetworkError") ||
-                             err.name === "AbortError" ||
-                             err.name === "TimeoutError";
-
-        if (isNetworkErr) {
-            // Surface a recovery state in the analysis panel rather
-            // than a jarring ERROR verdict on the strip.
-            showConnectionRecovery();
-        } else {
-            updateVerdictStrip({
-                verdict: "ERROR",
-                confidence: "—",
-                reasons: [buildErrorMessage(err)],
-                actions: [],
-            });
-        }
+        updateVerdictStrip({
+            verdict: "ERROR",
+            confidence: "—",
+            reasons: [buildErrorMessage(err)],
+            actions: [],
+        });
     } finally {
         isAnalyzing = false;
     }
@@ -730,24 +491,6 @@ function buildErrorMessage(err) {
     return "Unexpected: " + err.message;
 }
 
-
-/** Non-jarring network recovery state in the analysis sidebar */
-function showConnectionRecovery() {
-    if (!$analysisPanel) return;
-    const badge = $apReadyBadge; // preserve reference before innerHTML wipe
-    $analysisPanel.innerHTML = `
-        <div class="ap-idle" style="opacity:0.75; gap: 14px;">
-            <div style="font-size:1.5rem; opacity: 0.8">⚠</div>
-            <p style="color: var(--err-text); font-size: 0.64rem; letter-spacing: 1px; text-align:center;">
-                Secure analysis node unavailable.
-            </p>
-            <p style="font-size: 0.57rem; opacity: 0.45; text-align:center; font-family: var(--font-mono); letter-spacing:0.8px;">
-                Will retry on next message.
-            </p>
-        </div>`;
-    // Re-insert the ready badge so it doesn't disappear
-    if (badge) $analysisPanel.insertAdjacentElement("afterbegin", badge);
-}
 
 // ═══════════════════════════════════════════════════════════
 //  ANALYSIS PANEL — persistent left sidebar, live updates
@@ -951,17 +694,12 @@ function resetSession() {
     hideResultOverlay();
     $verdictStrip.classList.add("hidden");
     shield.setRisk(0.0);
-   if ($analysisPanel) {
+    if ($analysisPanel) {
         $analysisPanel.innerHTML = `
             <div class="ap-idle">
                 <div class="ap-idle-icon">🛡️</div>
                 <p>Awaiting conversation…</p>
             </div>`;
-        // Re-insert ready badge — innerHTML wipe detaches it from DOM
-        // but JS reference stays valid. Preserves trust signal across resets.
-        if (backendReady && $apReadyBadge) {
-            $analysisPanel.insertAdjacentElement("afterbegin", $apReadyBadge);
-        }
     }
     $input.value = "";
     $input.style.height = "auto";
@@ -1116,8 +854,3 @@ function initShader(canvasId) {
 // ═══════════════════════════════════════════════════════════
 const shield = initShader("shield-canvas");
 console.log("[SCAMSHIELD] v4 loaded. API:", API_URL);
-
-// ── Boot on page load ─────────────────────────────────────
-// Health ping starts immediately. Boot overlay keeps UI alive
-// while Render free-tier wakes up (typically 10-25s).
-initBootSequence();
