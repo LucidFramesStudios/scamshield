@@ -72,17 +72,19 @@ We built a closed-loop testing framework rather than trusting manual assessment.
   from each failure automatically
 - **Run history**: tracks accuracy trends across iterations
 
-Current accuracy:
-─────────────────────────────────────────
-  Total test cases : 73
-  Verdict accuracy : 74.0%  (54/73)
-  Trend accuracy   : 90.4%
-  False positives  : 1  (rate 3.1%)
-  False negatives  : 0  (rate 0.0%)
-  Under-detection  : 0 (SCAM→SUSPICIOUS)
-  Over-detection   : 18 (SAFE→SUSPICIOUS)
-  API errors       : 0
-  Elapsed total    : 156.4s
+| Current accuracy | Value |
+|---|---|
+|  Total test cases | 73 |
+| Verdict accuracy | 74.0%  (54/73) |
+|  Trend accuracy   | 90.4% |
+|  False positives  | 1  (rate 3.1%) |
+|  False negatives  | 0  (rate 0.0%) |
+|  Under-detection  | 0 (SCAM→SUSPICIOUS) |
+|  Over-detection   | 18 (SAFE→SUSPICIOUS) |
+|  API errors       | 0 |
+|  Elapsed total    | 156.4s |
+
+
 
 ---
 
