@@ -389,15 +389,9 @@ $btnStop.addEventListener("click", stopListening);
 
 function startListening() {
     if (!SpeechRecognition) return;
-
     speechBuffer = "";
     interimText  = "";
-
-    // Create recognizer ONLY ONCE
-    if (!recognition) {
-        initRecognition();
-    }
-
+    initRecognition();
     try {
         recognition.start();
     } catch (e) {
@@ -409,16 +403,12 @@ function startListening() {
 function stopListening() {
     isListening = false;
     clearTimeout(silenceTimer);
-
     $btnStop.classList.add("hidden");
     $btnMic.classList.remove("hidden");
-
     hideSpeechStatus();
-
     if (recognition) {
-        try {
-            recognition.stop();
-        } catch (_) {}
+        try { recognition.stop(); } catch (_) {}
+        recognition = null;
     }
 }
 
