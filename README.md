@@ -14,7 +14,7 @@ Rules · Classifier · Semantic Search · LLM Reasoning
 [![Claude](https://img.shields.io/badge/LLM-layer_4_only-orange?style=flat-square)]()
 [![Local](https://img.shields.io/badge/inference-local--first-purple?style=flat-square)]()
 
-[Live Demo ]https://scamshieldai.vercel.app/ · [Architecture](#architecture) · [Validation](#validation)
+ https://scamshieldai.vercel.app/ · [Architecture](#architecture) · [Validation](#validation)
 
 </div>
 
