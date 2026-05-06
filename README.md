@@ -93,16 +93,16 @@ changing the detection logic.
 ## Validation
 
 We built a closed-loop testing framework rather than relying on manual assessment.
-┌─────────────────────────────────────────────────────────────┐
-│  Adversarial Test Harness — ScamShield v1                   │
-│                                                             │
-│  Verdict accuracy  : 91.3%  (42 / 46 cases)                │
-│  False positive    : 4.3%   (2 cases)                       │
-│  False negative    : 4.3%   (2 cases)                       │
-│  Trend accuracy    : 89.1%                                  │
-│                                                             │
-│  System health     : ✓ HEALTHY                              │
-└─────────────────────────────────────────────────────────────┘
+
+  Adversarial Test Harness — ScamShield v1                   
+                                                             
+  Verdict accuracy  : 74.0%  (54/73 cases)                
+  False positive    : 1  (rate 3.1%)                      
+  False negative    : 0  (rate 0.0%)                       
+  Trend accuracy    : 90.4%                                  
+                                                             
+  System health    : ✗ NEEDS WORK (<75% accuracy — review patches)                             
+ 
 
 ### Test Infrastructure
 
