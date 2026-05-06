@@ -68,7 +68,7 @@ flowchart TD
     G --> I[Poll /health]
     I --> J[Open frontend]
     J --> K[Frontend polls /ready\nand /status]
-    K --> L([✅ User can chat])
+    K --> L([✅ User can chat or use mic to speak])
 
     L --> M[Backend analyzes with\nRules + ML + Conversation]
     M --> N[Vector search joins\nwhen warmup/cache ready]
