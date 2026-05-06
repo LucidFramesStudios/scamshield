@@ -30,7 +30,7 @@ Rules · Classifier · Semantic Search · LLM Reasoning
 
 ## The Problem
 
-In 2025, India received 3.24 crore cyber fraud complaints. ₹22,495 crore lost.
+In 2025, India received 32.4 Million cyber fraud complaints. 2.2 Billion Dollars lost.
 Digital arrest scams — where victims are held on continuous video calls by
 impersonators of CBI, TRAI, or RBI — averaged ₹1,56,502 per victim.
 
@@ -158,9 +158,9 @@ ScamShield produces two artifacts per analysis:
 - SCAM / SUSPICIOUS / SAFE with confidence level
 - 2–3 specific behavioral patterns that triggered the verdict, in plain language
 - One-tap access to national cyber helpline: 1930
-- Available in Hindi, Marathi, English
+- Available in Hindi, English
 
-**Incident Report** (PDF) — generated on request:
+**Incident Report** — generated on request:
 - Caller number, transcript snippet, matched pattern, timestamp
 - Formatted for filing at cybercrime.gov.in or sharing with family
 
