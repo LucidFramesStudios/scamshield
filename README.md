@@ -158,9 +158,9 @@ ScamShield produces two artifacts per analysis:
 - SCAM / SUSPICIOUS / SAFE with confidence level
 - 2–3 specific behavioral patterns that triggered the verdict, in plain language
 - One-tap access to national cyber helpline: 1930
-- Available in Hindi, English
+- Available in Hindi, Marathi, English
 
-**Incident Report**  — generated on request:
+**Incident Report** (PDF) — generated on request:
 - Caller number, transcript snippet, matched pattern, timestamp
 - Formatted for filing at cybercrime.gov.in or sharing with family
 
