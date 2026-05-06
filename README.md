@@ -34,11 +34,7 @@ python --version
 # If not 3.11, install it (Windows — via winget)
 winget install Python.Python.3.11
 
-# macOS
-brew install python@3.11
 
-# Ubuntu / Debian
-sudo apt install python3.11
 ```
 
 **Then:**
