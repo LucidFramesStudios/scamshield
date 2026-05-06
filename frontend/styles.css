@@ -1059,3 +1059,320 @@ header {
     .input-wrapper textarea { font-size: 0.85rem; padding: 9px 12px; }
     .result-panel { padding: 20px 16px 28px; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SYSTEM BOOT OVERLAY
+   Covers app-main during Render cold-start. Never leaves
+   user staring at a dead screen.
+   ═══════════════════════════════════════════════════════════ */
+
+.system-boot-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 200;                           /* above everything in app-main */
+    background: rgba(8, 9, 12, 0.94);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    pointer-events: all;
+    transition: opacity 0.55s ease;
+}
+
+/* Fading out on boot complete */
+.system-boot-overlay.boot-fading {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Horizontal scan line — keeps the canvas alive even during overlay */
+.boot-scan-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(74, 143, 232, 0.4) 40%,
+        rgba(74, 143, 232, 0.7) 50%,
+        rgba(74, 143, 232, 0.4) 60%,
+        transparent 100%
+    );
+    animation: scan-sweep 3.5s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes scan-sweep {
+    from { top: 0%; }
+    to   { top: 100%; }
+}
+
+/* ── Animated shield icon ─────────────────────────────────── */
+.boot-shield {
+    color: var(--accent-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.boot-shield svg {
+    animation: boot-shield-breathe 2.2s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(74, 143, 232, 0.5));
+}
+
+@keyframes boot-shield-breathe {
+    0%, 100% {
+        opacity: 0.65;
+        filter: drop-shadow(0 0 6px rgba(74, 143, 232, 0.3));
+    }
+    50% {
+        opacity: 1;
+        filter: drop-shadow(0 0 22px rgba(74, 143, 232, 0.9));
+    }
+}
+
+/* ── Boot stage list ──────────────────────────────────────── */
+.boot-stages {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 270px;
+}
+
+.boot-stage {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    opacity: 0.25;
+    transition: color 0.5s ease, opacity 0.5s ease;
+}
+
+.boot-stage.active {
+    color: var(--accent-blue);
+    opacity: 1;
+}
+
+.boot-stage.done {
+    color: var(--safe-text);
+    opacity: 0.5;
+}
+
+.boot-stage-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+.boot-stage.active .boot-stage-dot {
+    animation: dot-blink 0.75s ease-in-out infinite;
+}
+
+/* ── Progress track ───────────────────────────────────────── */
+.boot-progress-track {
+    width: 210px;
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.boot-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent-blue);
+    border-radius: 2px;
+    /* Transition set by JS per stage for precise control */
+    transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(74, 143, 232, 0.5);
+}
+
+/* ── Infrastructure notice ────────────────────────────────── */
+.boot-infra-notice {
+    font-family: var(--font-mono);
+    font-size: 0.57rem;
+    color: var(--text-dim);
+    letter-spacing: 0.8px;
+    text-align: center;
+    max-width: 260px;
+    line-height: 1.7;
+    opacity: 0.45;
+}
+
+.boot-infra-notice strong {
+    color: var(--text-secondary);
+}
+
+/* ── Offline / error state ────────────────────────────────── */
+.boot-error-state {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    animation: status-fade-in 0.3s ease-out;
+}
+
+.boot-error-state.visible { display: flex; }
+
+.boot-error-msg {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--err-text);
+    letter-spacing: 1px;
+    line-height: 1.7;
+    white-space: pre-line;
+}
+
+.boot-retry-btn {
+    padding: 7px 22px;
+    background: transparent;
+    border: 1px solid var(--err-border);
+    border-radius: 4px;
+    color: var(--err-text);
+    font-family: var(--font-mono);
+    font-size: 0.63rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.boot-retry-btn:hover { background: rgba(226, 163, 8, 0.08); }
+
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT DOCK — locked during boot, unlocked on ready
+   Communicates "not broken, just loading" clearly.
+   ═══════════════════════════════════════════════════════════ */
+
+.input-dock.dock-locked {
+    pointer-events: none;
+    opacity: 0.3;
+    filter: grayscale(0.6);
+    transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.input-dock.dock-unlocked {
+    pointer-events: all;
+    opacity: 1;
+    filter: none;
+    transition: opacity 0.6s ease 0.1s, filter 0.6s ease 0.1s;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ENHANCED ANALYZING INDICATOR
+   Phase label rotates through realistic processing steps.
+   Eliminates the "did it freeze?" moment.
+   ═══════════════════════════════════════════════════════════ */
+
+.analyzing-phase {
+    font-family: var(--font-mono);
+    font-size: 0.63rem;
+    color: var(--accent-blue);
+    letter-spacing: 1px;
+    opacity: 0.75;
+    transition: opacity 0.25s ease;
+    flex-shrink: 0;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ANALYSIS PANEL — "Realtime protection active" badge
+   Fires once on boot. Stays visible as a persistent
+   trust signal throughout the session.
+   ═══════════════════════════════════════════════════════════ */
+
+.ap-ready-badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 14px;
+    background: rgba(39, 174, 96, 0.05);
+    border-bottom: 1px solid rgba(39, 174, 96, 0.12);
+    font-family: var(--font-mono);
+    font-size: 0.57rem;
+    color: var(--safe-text);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+
+    /* Hidden until backend confirms healthy */
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.6s ease, max-height 0.5s ease, padding 0.4s ease;
+}
+
+.ap-ready-badge.visible {
+    opacity: 1;
+    max-height: 40px;
+    padding: 5px 14px;
+}
+
+.ap-ready-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--safe-text);
+    flex-shrink: 0;
+    /* Slow pulse — alive but calm, not alarming */
+    animation: dot-blink 2.8s ease-in-out infinite;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   SILENCE COUNTDOWN RING
+   SVG ring that drains as the 4s silence timer runs.
+   Externalizes internal state — user knows exactly when
+   speech will be committed.
+   ═══════════════════════════════════════════════════════════ */
+
+.silence-ring {
+    position: absolute;
+    /* Slightly larger than the 40px button */
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    overflow: visible;
+}
+
+.silence-ring.visible { opacity: 1; }
+
+.silence-ring circle {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    /* Circumference ≈ 2π × 23 ≈ 144.5 */
+    stroke-dasharray: 145;
+    stroke-dashoffset: 145;
+    stroke-linecap: round;
+    /* transition controlled by JS */
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   MIC BUTTON — active listening state
+   ═══════════════════════════════════════════════════════════ */
+
+.mic-btn.listening {
+    background: rgba(232, 93, 74, 0.12);
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
