@@ -144,8 +144,9 @@ never leaves the device unless layers 1–3 are inconclusive), and resilience
                              │ inconclusive
                              ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  LAYER 4 · LLM Reasoning                          🌐 CLAUDE API │
-│  Handles genuinely ambiguous / novel cases                      │
+│  PENDING - LAYER 4 · LLM Reasoning                🌐 CLAUDE API │
+│  **CURRENTLY BYPASSED**                                         |
+|  Handles genuinely ambiguous / novel cases                      │
 │  Invoked only when layers 1–3 return low-confidence verdicts    │
 │  Deterministic fallback if API unavailable                      │
 └────────────────────────────┬────────────────────────────────────┘
