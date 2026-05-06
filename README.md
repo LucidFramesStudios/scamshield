@@ -5,7 +5,7 @@ markdown<div align="center">
 **Real-time scam interruption via layered inference.**  
 Rules · Classifier · Semantic Search · LLM Reasoning
 
-[![Tests](https://img.shields.io/badge/adversarial_tests-91.3%25-brightgreen?style=flat-square)]()
+[![Tests](https://img.shields.io/badge/adversarial_tests-74.0%25-brightgreen?style=flat-square)]()
 [![Layers](https://img.shields.io/badge/inference_layers-4-blue?style=flat-square)]()
 [![Claude](https://img.shields.io/badge/LLM-layer_4_only-orange?style=flat-square)]()
 [![Local](https://img.shields.io/badge/inference-local--first-purple?style=flat-square)]()
