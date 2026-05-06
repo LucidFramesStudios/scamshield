@@ -1,0 +1,765 @@
+{
+  "total": 73,
+  "valid": 70,
+  "errors": 3,
+  "correct": 54,
+  "incorrect": 16,
+  "accuracy": 0.7714,
+  "fp_count": 1,
+  "fn_count": 0,
+  "scam_to_safe_count": 0,
+  "scam_to_suspicious_count": 0,
+  "under_detection": 0,
+  "over_detection": 15,
+  "fp_rate": 0.0345,
+  "fn_rate": 0.0,
+  "trend_accuracy": 0.913,
+  "confidence_errors": [
+    {
+      "name": "FP_scam_awareness_discussion",
+      "category": "false_positive",
+      "issue": "HIGH confidence on WRONG verdict (SCAM vs expected SAFE)",
+      "predicted": "SCAM",
+      "expected": "SAFE",
+      "confidence": "HIGH"
+    }
+  ],
+  "by_category": {
+    "advanced_scam": {
+      "total": 23,
+      "correct": 23,
+      "accuracy": 1.0
+    },
+    "boundary": {
+      "total": 9,
+      "correct": 6,
+      "accuracy": 0.667
+    },
+    "edge": {
+      "total": 10,
+      "correct": 7,
+      "accuracy": 0.7
+    },
+    "evolution": {
+      "total": 5,
+      "correct": 4,
+      "accuracy": 0.8
+    },
+    "false_positive": {
+      "total": 12,
+      "correct": 3,
+      "accuracy": 0.25
+    },
+    "stt_noise": {
+      "total": 11,
+      "correct": 11,
+      "accuracy": 1.0
+    }
+  },
+  "by_subcategory": {
+    "authority": {
+      "total": 8,
+      "correct": 8,
+      "accuracy": 1.0
+    },
+    "authority_legitimate": {
+      "total": 2,
+      "correct": 1,
+      "accuracy": 0.5
+    },
+    "authority_no_demand": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "broken_grammar": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "context_dependent": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "corporate": {
+      "total": 5,
+      "correct": 5,
+      "accuracy": 1.0
+    },
+    "denial_tactic": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "emotional": {
+      "total": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    "escalating": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "familiarity": {
+      "total": 5,
+      "correct": 5,
+      "accuracy": 1.0
+    },
+    "filler": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "flattery": {
+      "total": 2,
+      "correct": 2,
+      "accuracy": 1.0
+    },
+    "formal_unknown": {
+      "total": 1,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    "friend_money": {
+      "total": 5,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    "hinglish": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "long_benign": {
+      "total": 1,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    "meta": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "meta_discussion": {
+      "total": 1,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    "minimal": {
+      "total": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    "mixed_signals": {
+      "total": 4,
+      "correct": 4,
+      "accuracy": 1.0
+    },
+    "obfuscation": {
+      "total": 2,
+      "correct": 2,
+      "accuracy": 1.0
+    },
+    "office_payment": {
+      "total": 2,
+      "correct": 1,
+      "accuracy": 0.5
+    },
+    "phonetic": {
+      "total": 6,
+      "correct": 6,
+      "accuracy": 1.0
+    },
+    "real_bank_alert": {
+      "total": 3,
+      "correct": 2,
+      "accuracy": 0.667
+    },
+    "reverse_flow": {
+      "total": 1,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    "safe_corporate": {
+      "total": 1,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    "safe_to_safe": {
+      "total": 1,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    "safe_to_scam": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "scam_to_safe": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "stable_scam": {
+      "total": 1,
+      "correct": 1,
+      "accuracy": 1.0
+    },
+    "urgency_no_demand": {
+      "total": 1,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    "vague": {
+      "total": 2,
+      "correct": 1,
+      "accuracy": 0.5
+    }
+  },
+  "false_positives": [
+    {
+      "id": 7,
+      "name": "FP_scam_awareness_discussion",
+      "category": "false_positive",
+      "subcategory": "meta_discussion",
+      "expected": "SAFE",
+      "predicted": "SCAM",
+      "confidence": "HIGH",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Anti-scam awareness discussion quoting scam tactics. Contains 'OTP', 'warrant', 'digital arrest' in a meta-discussion context. Meta-indicator guard should fire.",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Monetary request detected from other party",
+        "Significant escalation: urgency and pressure introduced mid-conversation"
+      ]
+    }
+  ],
+  "false_negatives": [],
+  "scam_to_safe": [],
+  "scam_to_suspicious": [],
+  "under_detection_list": [],
+  "over_detection_list": [
+    {
+      "id": 5,
+      "name": "FP_colleague_petty_cash",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "ESCALATING",
+      "explanation": "Legitimate debt repayment reminder. 'You owe me' triggers money-intent scorer and GPay triggers transfer-method pattern despite this being benign.",
+      "reasons": [
+        "Monetary request detected from other party",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Mild escalation: tone shifted toward urgency"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "FP_friend_loan_repayment",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Friendly loan request with casual tone (yaar/bhai). NEFT + Rs 5000 + tonight will likely trigger rule engine and urgency scorer. Should remain SAFE.",
+      "reasons": [
+        "Casual familiar tone suggests known contact",
+        "Monetary request detected from other party",
+        "Mild escalation: tone shifted toward urgency"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "FP_splitting_restaurant_bill",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Bill splitting among friends. Contains UPI + money amount. Should be safe given the social context and mutual tone.",
+      "reasons": [
+        "Monetary request detected from other party",
+        "Mild escalation: tone shifted toward urgency",
+        "Unverified person requesting money with minimal relationship context"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "FP_gig_worker_payment_followup",
+      "category": "false_positive",
+      "subcategory": "office_payment",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Legitimate payment for services rendered. Contains PhonePe, phone number, amount. Anomaly scorer may flag unknown person + money request.",
+      "reasons": [
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Risk Scores \u2014 ML: 0.80 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.17 [rel=0.50, money=0.20, esc=0.00, emo=0.00, ano=0.00]"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "BOUND_vague_polite_money_request",
+      "category": "boundary",
+      "subcategory": "vague",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Very vague request, no amount, no method, no urgency. Polite tone. Should not trigger SCAM \u2014 at most SUSPICIOUS due to money framing.",
+      "reasons": [
+        "One-sided conversation \u2014 no response from user recorded",
+        "Risk Scores \u2014 ML: 0.80 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ]
+    },
+    {
+      "id": 24,
+      "name": "BOUND_urgent_real_medical_no_money",
+      "category": "boundary",
+      "subcategory": "urgency_no_demand",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Genuine family emergency with no financial ask. Urgency words present but resolves without money request. Should not be SCAM.",
+      "reasons": [
+        "Significant escalation: urgency and pressure introduced mid-conversation",
+        "Conversation opened with immediate urgency \u2014 no rapport building",
+        "Urgency language detected to pressure action"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "BOUND_formal_unknown_sender_no_demand",
+      "category": "boundary",
+      "subcategory": "formal_unknown",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Cold outreach without financial demand. Formal tone may trigger relationship scorer but no money, OTP, or authority claim present.",
+      "reasons": [
+        "Formal/impersonal tone from an unverified contact",
+        "Unverified identity assertion detected",
+        "Unverified familiarity claim \u2014 asserting prior relationship without context"
+      ]
+    },
+    {
+      "id": 32,
+      "name": "EVO_suspicious_resolves_safe",
+      "category": "evolution",
+      "subcategory": "safe_to_safe",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Insurance call that seems initially suspicious but resolves safely with proper redirection and explicit 'never ask OTP' assurance.",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Urgency language detected to pressure action",
+        "OTP sharing request detected"
+      ]
+    },
+    {
+      "id": 43,
+      "name": "EDGE_safe_money_flow_to_user",
+      "category": "edge",
+      "subcategory": "reverse_flow",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "MEDIUM",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Money flowing TO the user. Asking for UPI ID to send (not receive) money. Anomaly scorer may still flag UPI + money mention.",
+      "reasons": [
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "UPI transfer request detected",
+        "Risk Scores \u2014 ML: 0.83 | Rules: 0.40 (eff: 0.40) | Vector: 0.00 | Conversation: 0.17 [rel=0.50, money=0.20, esc=0.00, emo=0.00, ano=0.00]"
+      ]
+    },
+    {
+      "id": 46,
+      "name": "EDGE_safe_job_offer_no_money",
+      "category": "edge",
+      "subcategory": "safe_corporate",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Legitimate recruiter outreach. No money, no urgency, no OTP. Formal tone should not push into SUSPICIOUS.",
+      "reasons": [
+        "One-sided conversation \u2014 no response from user recorded",
+        "Risk Scores \u2014 ML: 0.80 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "EDGE_long_conversation_low_risk",
+      "category": "edge",
+      "subcategory": "long_benign",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Long benign conversation. No risk signals anywhere. Clean SAFE.",
+      "reasons": [
+        "ML classifier detected suspicious patterns (69.4% probability)",
+        "Risk Scores \u2014 ML: 0.69 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.12 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.00]"
+      ]
+    },
+    {
+      "id": 64,
+      "name": "ADV_safe_friend_birthday_money",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Friend sending birthday money TO user. Casual tone, UPI + money mention should not trigger SCAM.",
+      "reasons": [
+        "Casual familiar tone suggests known contact",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "UPI transfer request detected"
+      ]
+    },
+    {
+      "id": 65,
+      "name": "ADV_safe_real_police_fir",
+      "category": "false_positive",
+      "subcategory": "authority_legitimate",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Real police follow-up on user's own complaint. 'No payment required' is a key safe signal.",
+      "reasons": [
+        "Authority language detected \u2014 monitoring for demand signals",
+        "Risk Scores \u2014 ML: 0.74 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.16 [rel=0.65, money=0.00, esc=0.00, emo=0.00, ano=0.00]"
+      ]
+    },
+    {
+      "id": 66,
+      "name": "ADV_safe_delivery_otp",
+      "category": "false_positive",
+      "subcategory": "real_bank_alert",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Legitimate delivery OTP notification. Contains 'OTP' but in safe delivery context.",
+      "reasons": [
+        "One-sided conversation \u2014 no response from user recorded",
+        "OTP sharing request detected",
+        "Risk Scores \u2014 ML: 0.32 | Rules: 0.40 (eff: 0.40) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ]
+    },
+    {
+      "id": 67,
+      "name": "ADV_safe_roommate_rent",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "MEDIUM",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Roommate rent reminder. Large amount + NEFT but clear casual context.",
+      "reasons": [
+        "Casual familiar tone suggests known contact",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "NEFT transfer request detected"
+      ]
+    }
+  ],
+  "all_failures": [
+    {
+      "id": 5,
+      "name": "FP_colleague_petty_cash",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "ESCALATING",
+      "explanation": "Legitimate debt repayment reminder. 'You owe me' triggers money-intent scorer and GPay triggers transfer-method pattern despite this being benign.",
+      "reasons": [
+        "Monetary request detected from other party",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Mild escalation: tone shifted toward urgency"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "FP_friend_loan_repayment",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Friendly loan request with casual tone (yaar/bhai). NEFT + Rs 5000 + tonight will likely trigger rule engine and urgency scorer. Should remain SAFE.",
+      "reasons": [
+        "Casual familiar tone suggests known contact",
+        "Monetary request detected from other party",
+        "Mild escalation: tone shifted toward urgency"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "FP_scam_awareness_discussion",
+      "category": "false_positive",
+      "subcategory": "meta_discussion",
+      "expected": "SAFE",
+      "predicted": "SCAM",
+      "confidence": "HIGH",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Anti-scam awareness discussion quoting scam tactics. Contains 'OTP', 'warrant', 'digital arrest' in a meta-discussion context. Meta-indicator guard should fire.",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Monetary request detected from other party",
+        "Significant escalation: urgency and pressure introduced mid-conversation"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "FP_splitting_restaurant_bill",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Bill splitting among friends. Contains UPI + money amount. Should be safe given the social context and mutual tone.",
+      "reasons": [
+        "Monetary request detected from other party",
+        "Mild escalation: tone shifted toward urgency",
+        "Unverified person requesting money with minimal relationship context"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "FP_gig_worker_payment_followup",
+      "category": "false_positive",
+      "subcategory": "office_payment",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Legitimate payment for services rendered. Contains PhonePe, phone number, amount. Anomaly scorer may flag unknown person + money request.",
+      "reasons": [
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Risk Scores \u2014 ML: 0.80 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.17 [rel=0.50, money=0.20, esc=0.00, emo=0.00, ano=0.00]"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "BOUND_vague_polite_money_request",
+      "category": "boundary",
+      "subcategory": "vague",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Very vague request, no amount, no method, no urgency. Polite tone. Should not trigger SCAM \u2014 at most SUSPICIOUS due to money framing.",
+      "reasons": [
+        "One-sided conversation \u2014 no response from user recorded",
+        "Risk Scores \u2014 ML: 0.80 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ]
+    },
+    {
+      "id": 24,
+      "name": "BOUND_urgent_real_medical_no_money",
+      "category": "boundary",
+      "subcategory": "urgency_no_demand",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Genuine family emergency with no financial ask. Urgency words present but resolves without money request. Should not be SCAM.",
+      "reasons": [
+        "Significant escalation: urgency and pressure introduced mid-conversation",
+        "Conversation opened with immediate urgency \u2014 no rapport building",
+        "Urgency language detected to pressure action"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "BOUND_formal_unknown_sender_no_demand",
+      "category": "boundary",
+      "subcategory": "formal_unknown",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Cold outreach without financial demand. Formal tone may trigger relationship scorer but no money, OTP, or authority claim present.",
+      "reasons": [
+        "Formal/impersonal tone from an unverified contact",
+        "Unverified identity assertion detected",
+        "Unverified familiarity claim \u2014 asserting prior relationship without context"
+      ]
+    },
+    {
+      "id": 32,
+      "name": "EVO_suspicious_resolves_safe",
+      "category": "evolution",
+      "subcategory": "safe_to_safe",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Insurance call that seems initially suspicious but resolves safely with proper redirection and explicit 'never ask OTP' assurance.",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Urgency language detected to pressure action",
+        "OTP sharing request detected"
+      ]
+    },
+    {
+      "id": 43,
+      "name": "EDGE_safe_money_flow_to_user",
+      "category": "edge",
+      "subcategory": "reverse_flow",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "MEDIUM",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Money flowing TO the user. Asking for UPI ID to send (not receive) money. Anomaly scorer may still flag UPI + money mention.",
+      "reasons": [
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "UPI transfer request detected",
+        "Risk Scores \u2014 ML: 0.83 | Rules: 0.40 (eff: 0.40) | Vector: 0.00 | Conversation: 0.17 [rel=0.50, money=0.20, esc=0.00, emo=0.00, ano=0.00]"
+      ]
+    },
+    {
+      "id": 46,
+      "name": "EDGE_safe_job_offer_no_money",
+      "category": "edge",
+      "subcategory": "safe_corporate",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Legitimate recruiter outreach. No money, no urgency, no OTP. Formal tone should not push into SUSPICIOUS.",
+      "reasons": [
+        "One-sided conversation \u2014 no response from user recorded",
+        "Risk Scores \u2014 ML: 0.80 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "EDGE_long_conversation_low_risk",
+      "category": "edge",
+      "subcategory": "long_benign",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Long benign conversation. No risk signals anywhere. Clean SAFE.",
+      "reasons": [
+        "ML classifier detected suspicious patterns (69.4% probability)",
+        "Risk Scores \u2014 ML: 0.69 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.12 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.00]"
+      ]
+    },
+    {
+      "id": 64,
+      "name": "ADV_safe_friend_birthday_money",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Friend sending birthday money TO user. Casual tone, UPI + money mention should not trigger SCAM.",
+      "reasons": [
+        "Casual familiar tone suggests known contact",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "UPI transfer request detected"
+      ]
+    },
+    {
+      "id": 65,
+      "name": "ADV_safe_real_police_fir",
+      "category": "false_positive",
+      "subcategory": "authority_legitimate",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Real police follow-up on user's own complaint. 'No payment required' is a key safe signal.",
+      "reasons": [
+        "Authority language detected \u2014 monitoring for demand signals",
+        "Risk Scores \u2014 ML: 0.74 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.16 [rel=0.65, money=0.00, esc=0.00, emo=0.00, ano=0.00]"
+      ]
+    },
+    {
+      "id": 66,
+      "name": "ADV_safe_delivery_otp",
+      "category": "false_positive",
+      "subcategory": "real_bank_alert",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "LOW",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Legitimate delivery OTP notification. Contains 'OTP' but in safe delivery context.",
+      "reasons": [
+        "One-sided conversation \u2014 no response from user recorded",
+        "OTP sharing request detected",
+        "Risk Scores \u2014 ML: 0.32 | Rules: 0.40 (eff: 0.40) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ]
+    },
+    {
+      "id": 67,
+      "name": "ADV_safe_roommate_rent",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "expected": "SAFE",
+      "predicted": "SUSPICIOUS",
+      "confidence": "MEDIUM",
+      "trend_exp": "STABLE",
+      "trend_got": "STABLE",
+      "explanation": "Roommate rent reminder. Large amount + NEFT but clear casual context.",
+      "reasons": [
+        "Casual familiar tone suggests known contact",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "NEFT transfer request detected"
+      ]
+    }
+  ]
+}

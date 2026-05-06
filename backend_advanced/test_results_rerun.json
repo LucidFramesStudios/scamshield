@@ -1,0 +1,1347 @@
+{
+  "meta": {
+    "run_at": "2026-05-06T01:04:39.747162",
+    "api_url": "http://localhost:8000/analyze",
+    "total": 30,
+    "passed": 0,
+    "failed": 30,
+    "errors": 0,
+    "elapsed_s": 63.76
+  },
+  "results": [
+    {
+      "id": 1,
+      "name": "FP_friend_casual_money",
+      "category": "false_positive",
+      "subcategory": "friend_money",
+      "explanation": "Genuine friend UPI request. Casual tone (bro/bhai/dude), small amount, mutual conversation, no urgency pressure. Anomaly scorer may misfire on 'unverified person + money' despite strong casual signals.",
+      "expected_verdict": "SAFE",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Casual familiar tone suggests known contact",
+        "Monetary request detected from other party",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Mild escalation: tone shifted toward urgency",
+        "Unverified person requesting money with minimal relationship context",
+        "UPI transfer request detected",
+        "Risk Scores \u2014 ML: 0.79 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.33 [rel=0.25, money=0.50, esc=0.40, emo=0.00, ano=0.40]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "UPI transfer request detected"
+        ],
+        "reasons": [
+          "Casual familiar tone suggests known contact",
+          "Monetary request detected from other party",
+          "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+          "Mild escalation: tone shifted toward urgency",
+          "Unverified person requesting money with minimal relationship context",
+          "UPI transfer request detected",
+          "Risk Scores \u2014 ML: 0.79 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.33 [rel=0.25, money=0.50, esc=0.40, emo=0.00, ano=0.40]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 7,
+      "name": "FP_scam_awareness_discussion",
+      "category": "false_positive",
+      "subcategory": "meta_discussion",
+      "explanation": "Anti-scam awareness discussion quoting scam tactics. Contains 'OTP', 'warrant', 'digital arrest' in a meta-discussion context. Meta-indicator guard should fire.",
+      "expected_verdict": "SAFE",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Monetary request detected from other party",
+        "Significant escalation: urgency and pressure introduced mid-conversation",
+        "Threats or legal pressure detected (arrest/warrant/FIR)",
+        "Conversation opened with immediate urgency \u2014 no rapport building",
+        "Unverified person requesting money with minimal relationship context",
+        "Authority claim combined with financial demand \u2014 common government impersonation pattern",
+        "Secrecy/isolation tactic: instructed not to inform others or hang up",
+        "Authority identity claimed but no verifiable personal context established",
+        "OTP sharing request detected",
+        "Money transfer demand detected",
+        "Digital arrest threat detected",
+        "Call-hold isolation tactic detected",
+        "Risk Scores \u2014 ML: 0.63 | Rules: 0.55 (eff: 0.55) | Vector: 0.00 | Conversation: 0.59 [rel=0.85, money=0.30, esc=0.75, emo=0.00, ano=1.00]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "OTP sharing request detected",
+          "CBI officer speaking. We have intercepted your call logs showing conversation wi",
+          "This is LIC officer calling. You are eligible for Rs 74,000 policy bonus refund.",
+          "Namaskar, I am officer from TRAI. Your number is being used by terrorists. We ar",
+          "Call-hold isolation tactic detected",
+          "Money transfer demand detected",
+          "Digital arrest threat detected"
+        ],
+        "reasons": [
+          "Caller claims to be a government/law-enforcement authority",
+          "Monetary request detected from other party",
+          "Significant escalation: urgency and pressure introduced mid-conversation",
+          "Threats or legal pressure detected (arrest/warrant/FIR)",
+          "Conversation opened with immediate urgency \u2014 no rapport building",
+          "Unverified person requesting money with minimal relationship context",
+          "Authority claim combined with financial demand \u2014 common government impersonation pattern",
+          "Secrecy/isolation tactic: instructed not to inform others or hang up",
+          "Authority identity claimed but no verifiable personal context established",
+          "OTP sharing request detected",
+          "Money transfer demand detected",
+          "Digital arrest threat detected",
+          "Call-hold isolation tactic detected",
+          "Risk Scores \u2014 ML: 0.63 | Rules: 0.55 (eff: 0.55) | Vector: 0.00 | Conversation: 0.59 [rel=0.85, money=0.30, esc=0.75, emo=0.00, ano=1.00]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 11,
+      "name": "SCAM_fake_familiarity_delayed_ask",
+      "category": "advanced_scam",
+      "subcategory": "familiarity",
+      "explanation": "Classic fake familiarity + delayed financial ask. Builds rapport over several turns before pivoting to request. Anomaly + familiarity detectors should catch this.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Monetary request detected from other party",
+        "Specific financial amount mentioned",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Mild escalation: tone shifted toward urgency",
+        "Urgency language detected to pressure action",
+        "Unverified familiarity claim \u2014 asserting prior relationship without context",
+        "Familiarity claim followed by financial request \u2014 strong scam pattern",
+        "Gradual trust-building followed by financial request detected",
+        "UPI transfer request detected",
+        "Risk increasing due to recent messages",
+        "Risk Scores \u2014 ML: 0.81 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.45 [rel=0.40, money=0.65, esc=0.40, emo=0.15, ano=0.55]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "UPI transfer request detected"
+        ],
+        "reasons": [
+          "Monetary request detected from other party",
+          "Specific financial amount mentioned",
+          "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+          "Mild escalation: tone shifted toward urgency",
+          "Urgency language detected to pressure action",
+          "Unverified familiarity claim \u2014 asserting prior relationship without context",
+          "Familiarity claim followed by financial request \u2014 strong scam pattern",
+          "Gradual trust-building followed by financial request detected",
+          "UPI transfer request detected",
+          "Risk increasing due to recent messages",
+          "Risk Scores \u2014 ML: 0.81 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.45 [rel=0.40, money=0.65, esc=0.40, emo=0.15, ano=0.55]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 12,
+      "name": "SCAM_authority_otp_extraction",
+      "category": "advanced_scam",
+      "subcategory": "authority",
+      "explanation": "Authority impersonation + OTP extraction + account freeze threat. All major signals present: authority claim, OTP request, urgency, fear.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Unverified identity assertion detected",
+        "Severe escalation: conversation moved from friendly to threatening",
+        "Threats or legal pressure detected (arrest/warrant/FIR)",
+        "Urgency language detected to pressure action",
+        "Guilt/empathy manipulation detected ('only you can help')",
+        "Fear language detected (arrest/blocking threats)",
+        "OTP sharing request detected",
+        "Risk Scores \u2014 ML: 0.97 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.52 [rel=1.00, money=0.00, esc=0.95, emo=0.55, ano=0.00]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "Your Paytm KYC is incomplete. Your wallet will be blocked tonight. Call our KYC ",
+          "OTP sharing request detected",
+          "RBI officer speaking. Your bank account has been flagged under Prevention of Mon",
+          "Mumbai Police Cyber Crime Division is speaking. Your Aadhaar is linked to 14 fak"
+        ],
+        "reasons": [
+          "Caller claims to be a government/law-enforcement authority",
+          "Unverified identity assertion detected",
+          "Severe escalation: conversation moved from friendly to threatening",
+          "Threats or legal pressure detected (arrest/warrant/FIR)",
+          "Urgency language detected to pressure action",
+          "Guilt/empathy manipulation detected ('only you can help')",
+          "Fear language detected (arrest/blocking threats)",
+          "OTP sharing request detected",
+          "Risk Scores \u2014 ML: 0.97 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.52 [rel=1.00, money=0.00, esc=0.95, emo=0.55, ano=0.00]"
+        ],
+        "actions": [
+          "Hang up immediately.",
+          "Do NOT send money or share OTP/PIN.",
+          "Call Cyber Crime Helpline: 1930",
+          "Block this number and report it."
+        ],
+        "provider": "CONVERSATION + RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 13,
+      "name": "SCAM_emotional_family_impersonation",
+      "category": "advanced_scam",
+      "subcategory": "emotional",
+      "explanation": "Hospital impersonation scam targeting family emergency emotion. Contains NEFT, account number, IFSC, extreme urgency, and fear of loss of life.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Monetary request detected from other party",
+        "Specific financial amount mentioned",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Multiple conversation turns involve financial requests",
+        "Significant escalation: urgency and pressure introduced mid-conversation",
+        "High-frequency urgency language creating artificial panic",
+        "Unverified person requesting money with minimal relationship context",
+        "NEFT transfer request detected",
+        "Risk Scores \u2014 ML: 0.82 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.57 [rel=0.50, money=0.80, esc=0.70, emo=0.30, ano=0.40]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "This is SEBI enforcement officer. Your demat account shows 48 suspicious transac",
+          "NEFT transfer request detected",
+          "I am DCP Suresh Kumar from Economic Offences Wing. Your savings account at SBI i",
+          "RBI officer speaking. Your bank account has been flagged under Prevention of Mon"
+        ],
+        "reasons": [
+          "Monetary request detected from other party",
+          "Specific financial amount mentioned",
+          "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+          "Multiple conversation turns involve financial requests",
+          "Significant escalation: urgency and pressure introduced mid-conversation",
+          "High-frequency urgency language creating artificial panic",
+          "Unverified person requesting money with minimal relationship context",
+          "NEFT transfer request detected",
+          "Risk Scores \u2014 ML: 0.82 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.57 [rel=0.50, money=0.80, esc=0.70, emo=0.30, ano=0.40]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 14,
+      "name": "SCAM_corporate_invoice_fraud",
+      "category": "advanced_scam",
+      "subcategory": "corporate",
+      "explanation": "Business email compromise / fake vendor invoice. Legal threat + urgency + large amount. Wire transfer trigger + legal notice = strong scam pattern.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.69 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.35 [rel=0.50, money=0.35, esc=0.40, emo=0.00, ano=0.40]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.69 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.35 [rel=0.50, money=0.35, esc=0.40, emo=0.00, ano=0.40]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 16,
+      "name": "SCAM_lottery_advance_fee",
+      "category": "advanced_scam",
+      "subcategory": "flattery",
+      "explanation": "Lottery advance-fee scam. Flattery opener, authority claim (RBI), clearance fee, UPI payment request. Classic pattern.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Monetary request detected from other party",
+        "Specific financial amount mentioned",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Multiple conversation turns involve financial requests",
+        "Mild escalation: tone shifted toward urgency",
+        "Flattery/prize bait detected to lower guard",
+        "Unverified person requesting money with minimal relationship context",
+        "Authority claim combined with financial demand \u2014 common government impersonation pattern",
+        "Authority identity claimed but no verifiable personal context established",
+        "UPI transfer request detected",
+        "Fake fee demand detected",
+        "Fake clearance fee detected",
+        "High-pressure financial demand or credential theft pattern detected.",
+        "Offer too good to be true, or urgent payment / fee required.",
+        "Semantic similarity: 82.2%",
+        "Risk Scores \u2014 ML: 0.92 | Rules: 0.45 (eff: 0.45) | Vector: 0.82 | Conversation: 0.67 [rel=0.85, money=0.80, esc=0.40, emo=0.20, ano=1.00]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "MEDIUM",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "Congratulations! You have won the KBC lottery of Rs 25 lakh. To claim your prize",
+          "UPI transfer request detected",
+          "Fake clearance fee detected",
+          "Fake fee demand detected"
+        ],
+        "reasons": [
+          "Caller claims to be a government/law-enforcement authority",
+          "Monetary request detected from other party",
+          "Specific financial amount mentioned",
+          "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+          "Multiple conversation turns involve financial requests",
+          "Mild escalation: tone shifted toward urgency",
+          "Flattery/prize bait detected to lower guard",
+          "Unverified person requesting money with minimal relationship context",
+          "Authority claim combined with financial demand \u2014 common government impersonation pattern",
+          "Authority identity claimed but no verifiable personal context established",
+          "UPI transfer request detected",
+          "Fake fee demand detected",
+          "Fake clearance fee detected",
+          "High-pressure financial demand or credential theft pattern detected.",
+          "Offer too good to be true, or urgent payment / fee required.",
+          "Semantic similarity: 82.2%",
+          "Risk Scores \u2014 ML: 0.92 | Rules: 0.45 (eff: 0.45) | Vector: 0.82 | Conversation: 0.67 [rel=0.85, money=0.80, esc=0.40, emo=0.20, ano=1.00]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + RULES + ML + VECTOR"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 17,
+      "name": "SCAM_job_offer_registration_fee",
+      "category": "advanced_scam",
+      "subcategory": "corporate",
+      "explanation": "Fake job scam with registration fee. Upfront payment + share screenshot tactic. PhonePe number + deposit = red flags.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Monetary request detected from other party",
+        "Specific financial amount mentioned",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Multiple conversation turns involve financial requests",
+        "Significant escalation: urgency and pressure introduced mid-conversation",
+        "Urgency language detected to pressure action",
+        "Unverified person requesting money with minimal relationship context",
+        "Risk Scores \u2014 ML: 0.92 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.55 [rel=0.50, money=0.80, esc=0.70, emo=0.15, ano=0.40]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "UNKNOWN",
+        "matches": [
+          "You have been selected as a premium customer. To unlock your exclusive benefits ",
+          "Work from home earn Rs 50,000 per month. No experience needed. Just pay Rs 1,500"
+        ],
+        "reasons": [
+          "Monetary request detected from other party",
+          "Specific financial amount mentioned",
+          "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+          "Multiple conversation turns involve financial requests",
+          "Significant escalation: urgency and pressure introduced mid-conversation",
+          "Urgency language detected to pressure action",
+          "Unverified person requesting money with minimal relationship context",
+          "Risk Scores \u2014 ML: 0.92 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.55 [rel=0.50, money=0.80, esc=0.70, emo=0.15, ano=0.40]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 18,
+      "name": "SCAM_insurance_refund_overpayment",
+      "category": "advanced_scam",
+      "subcategory": "authority",
+      "explanation": "Overpayment refund scam. NEFT + account freeze threat + legal action + urgency. High escalation from refund story to freeze threat.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Monetary request detected from other party",
+        "Specific financial amount mentioned",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Multiple conversation turns involve financial requests",
+        "Significant escalation: urgency and pressure introduced mid-conversation",
+        "Threats or legal pressure detected (arrest/warrant/FIR)",
+        "Urgency language detected to pressure action",
+        "Fear language detected (arrest/blocking threats)",
+        "Authority claim combined with financial demand \u2014 common government impersonation pattern",
+        "NEFT transfer request detected",
+        "Risk Scores \u2014 ML: 0.94 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.67 [rel=0.85, money=0.80, esc=0.75, emo=0.30, ano=0.40]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "MEDIUM",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "I am calling from SBI head office fraud department. Your account will be freeze ",
+          "NEFT transfer request detected",
+          "This is LIC officer calling. You are eligible for Rs 74,000 policy bonus refund.",
+          "You have a pending tax refund of Rs 14,500. To receive it click the link and ent"
+        ],
+        "reasons": [
+          "Caller claims to be a government/law-enforcement authority",
+          "Monetary request detected from other party",
+          "Specific financial amount mentioned",
+          "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+          "Multiple conversation turns involve financial requests",
+          "Significant escalation: urgency and pressure introduced mid-conversation",
+          "Threats or legal pressure detected (arrest/warrant/FIR)",
+          "Urgency language detected to pressure action",
+          "Fear language detected (arrest/blocking threats)",
+          "Authority claim combined with financial demand \u2014 common government impersonation pattern",
+          "NEFT transfer request detected",
+          "Risk Scores \u2014 ML: 0.94 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.67 [rel=0.85, money=0.80, esc=0.75, emo=0.30, ano=0.40]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 19,
+      "name": "SCAM_customs_package_clearance",
+      "category": "advanced_scam",
+      "subcategory": "authority",
+      "explanation": "Customs impersonation scam. Release fee + document phishing + UPI request. Authority + money + secrecy cluster.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Monetary request detected from other party",
+        "Specific financial amount mentioned",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Severe escalation: conversation moved from friendly to threatening",
+        "Threats or legal pressure detected (arrest/warrant/FIR)",
+        "Fear language detected (arrest/blocking threats)",
+        "Unverified person requesting money with minimal relationship context",
+        "Authority claim combined with financial demand \u2014 common government impersonation pattern",
+        "Authority identity claimed but no verifiable personal context established",
+        "UPI transfer request detected",
+        "Credential sharing request detected",
+        "Fake release fee detected",
+        "Caller is impersonating law enforcement or government officials.",
+        "Uses fear tactics: threats of arrest, warrant, or account seizure.",
+        "Semantic similarity: 71.1%",
+        "Risk Scores \u2014 ML: 0.90 | Rules: 0.45 (eff: 0.45) | Vector: 0.71 | Conversation: 0.74 [rel=0.85, money=0.65, esc=0.95, emo=0.15, ano=1.00]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "MEDIUM",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "UPI transfer request detected",
+          "Sir, I am IPS officer from central bureau. Your Aadhaar has been linked to drug ",
+          "Fake release fee detected",
+          "Credential sharing request detected",
+          "This is Deputy Commissioner Rajesh Sharma calling from CBI headquarters New Delh",
+          "Calling from Narcotics Control Bureau. Package with your Aadhaar details found w"
+        ],
+        "reasons": [
+          "Caller claims to be a government/law-enforcement authority",
+          "Monetary request detected from other party",
+          "Specific financial amount mentioned",
+          "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+          "Severe escalation: conversation moved from friendly to threatening",
+          "Threats or legal pressure detected (arrest/warrant/FIR)",
+          "Fear language detected (arrest/blocking threats)",
+          "Unverified person requesting money with minimal relationship context",
+          "Authority claim combined with financial demand \u2014 common government impersonation pattern",
+          "Authority identity claimed but no verifiable personal context established",
+          "UPI transfer request detected",
+          "Credential sharing request detected",
+          "Fake release fee detected",
+          "Caller is impersonating law enforcement or government officials.",
+          "Uses fear tactics: threats of arrest, warrant, or account seizure.",
+          "Semantic similarity: 71.1%",
+          "Risk Scores \u2014 ML: 0.90 | Rules: 0.45 (eff: 0.45) | Vector: 0.71 | Conversation: 0.74 [rel=0.85, money=0.65, esc=0.95, emo=0.15, ano=1.00]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + RULES + ML + VECTOR"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 20,
+      "name": "SCAM_romantic_pig_butchering",
+      "category": "advanced_scam",
+      "subcategory": "familiarity",
+      "explanation": "Pig-butchering intro. Builds vague familiarity, then pitches investment requiring upfront crypto deposit. Delayed ask after establishing rapport.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.79 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.17 [rel=0.50, money=0.20, esc=0.00, emo=0.00, ano=0.00]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.79 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.17 [rel=0.50, money=0.20, esc=0.00, emo=0.00, ano=0.00]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 23,
+      "name": "BOUND_mixed_safe_and_risky",
+      "category": "boundary",
+      "subcategory": "mixed_signals",
+      "explanation": "Starts casual, then pivots to a suspicious transaction query. Could be genuine alert or phishing setup. Mixed signals = SUSPICIOUS.",
+      "expected_verdict": "SUSPICIOUS",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.74 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.29 [rel=0.25, money=0.35, esc=0.40, emo=0.00, ano=0.40]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.74 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.29 [rel=0.25, money=0.35, esc=0.40, emo=0.00, ano=0.40]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 26,
+      "name": "BOUND_single_urgency_word_no_context",
+      "category": "boundary",
+      "subcategory": "vague",
+      "explanation": "Minimal message with urgency + account keyword but no specifics. Insufficient for SCAM, clearly odd enough for SUSPICIOUS.",
+      "expected_verdict": "SUSPICIOUS",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.75 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.75 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 29,
+      "name": "EVO_safe_to_scam_gradual",
+      "category": "evolution",
+      "subcategory": "safe_to_scam",
+      "explanation": "Conversation starts warm and friendly (SAFE), gradually pivots to investment pitch requiring upfront payment. ESCALATING trend + SCAM verdict expected.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Monetary request detected from other party",
+        "Specific financial amount mentioned",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Mild escalation: tone shifted toward urgency",
+        "UPI transfer request detected",
+        "Credential sharing request detected",
+        "Risk increasing due to recent messages",
+        "Risk Scores \u2014 ML: 0.91 | Rules: 0.35 (eff: 0.35) | Vector: 0.00 | Conversation: 0.34 [rel=0.40, money=0.65, esc=0.40, emo=0.00, ano=0.00]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "Invest in our guaranteed scheme and get 40 percent monthly returns. Thousands of",
+          "Join our trading group and make $500 daily with bitcoin. Our AI algorithm has 94",
+          "UPI transfer request detected",
+          "Credential sharing request detected"
+        ],
+        "reasons": [
+          "Monetary request detected from other party",
+          "Specific financial amount mentioned",
+          "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+          "Mild escalation: tone shifted toward urgency",
+          "UPI transfer request detected",
+          "Credential sharing request detected",
+          "Risk increasing due to recent messages",
+          "Risk Scores \u2014 ML: 0.91 | Rules: 0.35 (eff: 0.35) | Vector: 0.00 | Conversation: 0.34 [rel=0.40, money=0.65, esc=0.40, emo=0.00, ano=0.00]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 30,
+      "name": "EVO_scam_to_safe_caller_backs_down",
+      "category": "evolution",
+      "subcategory": "scam_to_safe",
+      "explanation": "Scam opener but caller backs down when challenged. Verdict should still be SCAM based on the initial message. Trend should be DE-ESCALATING. Scammer denial ('training simulation') is itself a manipulation tactic.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "DE-ESCALATING",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.84 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.12 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.00]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.84 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.12 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.00]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 31,
+      "name": "EVO_gradual_escalation_four_phases",
+      "category": "evolution",
+      "subcategory": "escalating",
+      "explanation": "Textbook 4-phase escalation: neutral greeting \u2192 vague concern \u2192 money amount \u2192 OTP demand + FIR threat. Full escalation range (phases 0\u21923).",
+      "expected_verdict": "SCAM",
+      "expected_trend": "ESCALATING",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Specific financial amount mentioned",
+        "Severe escalation: conversation moved from friendly to threatening",
+        "Threats or legal pressure detected (arrest/warrant/FIR)",
+        "Urgency language detected to pressure action",
+        "Fear language detected (arrest/blocking threats)",
+        "OTP sharing request detected",
+        "Credential sharing request detected",
+        "Risk Scores \u2014 ML: 0.94 | Rules: 0.35 (eff: 0.35) | Vector: 0.00 | Conversation: 0.40 [rel=0.50, money=0.15, esc=0.95, emo=0.30, ano=0.00]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "This is SEBI enforcement officer. Your demat account shows 48 suspicious transac",
+          "OTP sharing request detected",
+          "This is your bank calling. We detected suspicious activity on your account. Plea",
+          "Credential sharing request detected",
+          "I am DCP Suresh Kumar from Economic Offences Wing. Your savings account at SBI i"
+        ],
+        "reasons": [
+          "Specific financial amount mentioned",
+          "Severe escalation: conversation moved from friendly to threatening",
+          "Threats or legal pressure detected (arrest/warrant/FIR)",
+          "Urgency language detected to pressure action",
+          "Fear language detected (arrest/blocking threats)",
+          "OTP sharing request detected",
+          "Credential sharing request detected",
+          "Risk Scores \u2014 ML: 0.94 | Rules: 0.35 (eff: 0.35) | Vector: 0.00 | Conversation: 0.40 [rel=0.50, money=0.15, esc=0.95, emo=0.30, ano=0.00]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 33,
+      "name": "EVO_stable_high_risk_no_escalation",
+      "category": "evolution",
+      "subcategory": "stable_scam",
+      "explanation": "Scam that opens at maximum intensity with no escalation \u2014 already threatening from the first message. Trend should be STABLE (uniformly high risk).",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Threats or legal pressure detected (arrest/warrant/FIR)",
+        "Conversation opened with immediate urgency \u2014 no rapport building",
+        "Urgency language detected to pressure action",
+        "Fear-inducing language: threats of arrest, account freeze, or legal action",
+        "OTP sharing request detected",
+        "Risk Scores \u2014 ML: 0.84 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.35 [rel=0.50, money=0.00, esc=0.75, emo=0.50, ano=0.00]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "OTP sharing request detected",
+          "This is LIC officer calling. You are eligible for Rs 74,000 policy bonus refund.",
+          "RBI officer speaking. Your bank account has been flagged under Prevention of Mon",
+          "Your Paytm KYC is incomplete. Your wallet will be blocked tonight. Call our KYC "
+        ],
+        "reasons": [
+          "Threats or legal pressure detected (arrest/warrant/FIR)",
+          "Conversation opened with immediate urgency \u2014 no rapport building",
+          "Urgency language detected to pressure action",
+          "Fear-inducing language: threats of arrest, account freeze, or legal action",
+          "OTP sharing request detected",
+          "Risk Scores \u2014 ML: 0.84 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.35 [rel=0.50, money=0.00, esc=0.75, emo=0.50, ano=0.00]"
+        ],
+        "actions": [
+          "Hang up immediately.",
+          "Do NOT send money or share OTP/PIN.",
+          "Call Cyber Crime Helpline: 1930",
+          "Block this number and report it."
+        ],
+        "provider": "CONVERSATION + RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 34,
+      "name": "STT_phonetic_upi_bypass",
+      "category": "stt_noise",
+      "subcategory": "phonetic",
+      "explanation": "Phonetic spelling of UPI ('you pee eye'). Rule engine looks for \\bupi\\b which will not match. STT correction dict doesn't cover this variant.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.69 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.35 [rel=0.50, money=0.50, esc=0.00, emo=0.15, ano=0.50]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.69 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.35 [rel=0.50, money=0.50, esc=0.00, emo=0.15, ano=0.50]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 35,
+      "name": "STT_broken_grammar_otp_request",
+      "category": "stt_noise",
+      "subcategory": "broken_grammar",
+      "explanation": "Severely broken grammar with phonetic OTP variant ('otpee'). Rule \\botp\\b may not match 'otpee'.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.51 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.51 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 36,
+      "name": "STT_hinglish_threat",
+      "category": "stt_noise",
+      "subcategory": "hinglish",
+      "explanation": "Pure Hinglish threat: 'account will be closed, send money immediately or arrest'. HINGLISH_MAP maps 'turant' \u2192 'immediately' and 'paisa' \u2192 'money' but 'girftari' (arrest) and 'bhejo' (send) are unmapped.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.93 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.93 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 37,
+      "name": "STT_spaced_keyword_warrant",
+      "category": "stt_noise",
+      "subcategory": "phonetic",
+      "explanation": "STT-inserted spaces inside keywords: 'war rant' and 'bail able'. Regex \\bwarrant\\b and \\bnon.?bailable\\b won't match with spaces inserted.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.79 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.79 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 38,
+      "name": "STT_numeric_amount_obfuscated",
+      "category": "stt_noise",
+      "subcategory": "obfuscation",
+      "explanation": "Amount given as words not digits ('ten thousand'). Amount pattern regex looks for digit patterns. NEFT rule should still fire but amount won't be extracted.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.71 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.38 [rel=0.50, money=0.70, esc=0.00, emo=0.00, ano=0.50]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.71 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.38 [rel=0.50, money=0.70, esc=0.00, emo=0.00, ano=0.50]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 39,
+      "name": "STT_ips_phonetic_authority",
+      "category": "stt_noise",
+      "subcategory": "phonetic",
+      "explanation": "IPS officer claim spoken phonetically ('eye pee ess'). Authority claim detector looks for 'officer' (present) but not 'eye pee ess' = IPS variant.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Caller claims to be a government/law-enforcement authority",
+        "Secrecy/isolation tactic: instructed not to inform others or hang up",
+        "One-sided conversation \u2014 no response from user recorded",
+        "Digital arrest threat detected",
+        "Forced call retention detected",
+        "Risk Scores \u2014 ML: 0.83 | Rules: 0.35 (eff: 0.35) | Vector: 0.00 | Conversation: 0.28 [rel=0.85, money=0.00, esc=0.00, emo=0.00, ano=0.45]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "Namaskar, I am officer from TRAI. Your number is being used by terrorists. We ar",
+          "This is Enforcement Directorate officer speaking. FEMA violation detected in you",
+          "This is TRAI officer. Your mobile number is going to be disconnected permanently",
+          "Digital arrest threat detected",
+          "Forced call retention detected"
+        ],
+        "reasons": [
+          "Caller claims to be a government/law-enforcement authority",
+          "Secrecy/isolation tactic: instructed not to inform others or hang up",
+          "One-sided conversation \u2014 no response from user recorded",
+          "Digital arrest threat detected",
+          "Forced call retention detected",
+          "Risk Scores \u2014 ML: 0.83 | Rules: 0.35 (eff: 0.35) | Vector: 0.00 | Conversation: 0.28 [rel=0.85, money=0.00, esc=0.00, emo=0.00, ano=0.45]"
+        ],
+        "actions": [
+          "Hang up immediately.",
+          "Do NOT send money or share OTP/PIN.",
+          "Call Cyber Crime Helpline: 1930",
+          "Block this number and report it."
+        ],
+        "provider": "RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 40,
+      "name": "STT_filler_words_diluted_scam",
+      "category": "stt_noise",
+      "subcategory": "filler",
+      "explanation": "Heavy filler injection around OTP + account + right now keywords. STT_FILLERS removes 'uh', 'um', 'like', 'basically' in preprocess. Remaining text should still be caught.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.86 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.16 [rel=0.50, money=0.00, esc=0.00, emo=0.15, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.86 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.16 [rel=0.50, money=0.00, esc=0.00, emo=0.15, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 41,
+      "name": "STT_unicode_lookalike_chars",
+      "category": "stt_noise",
+      "subcategory": "obfuscation",
+      "explanation": "Cyrillic lookalike characters substituted ('\u0430' for 'a', '\u0441' for 'c') and zero for 'o'. Regex won't match 'sh\u0430re' or '0TP'. Unicode normalization missing.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.79 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.79 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 42,
+      "name": "EDGE_empty_but_valid_request",
+      "category": "edge",
+      "subcategory": "minimal",
+      "explanation": "Single CVV solicitation. Rule engine must catch this immediately.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.71 | Rules: 0.35 (eff: 0.35) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.71 | Rules: 0.35 (eff: 0.35) | Vector: 0.00 | Conversation: 0.14 [rel=0.50, money=0.00, esc=0.00, emo=0.00, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 43,
+      "name": "EDGE_safe_money_flow_to_user",
+      "category": "edge",
+      "subcategory": "reverse_flow",
+      "explanation": "Money flowing TO the user. Asking for UPI ID to send (not receive) money. Anomaly scorer may still flag UPI + money mention.",
+      "expected_verdict": "SAFE",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SUSPICIOUS",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Specific financial amount mentioned",
+        "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+        "Mild escalation: tone shifted toward urgency",
+        "Unverified person requesting money with minimal relationship context",
+        "UPI transfer request detected",
+        "Risk Scores \u2014 ML: 0.82 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.35 [rel=0.50, money=0.35, esc=0.40, emo=0.00, ano=0.40]"
+      ],
+      "raw_response": {
+        "verdict": "SUSPICIOUS",
+        "confidence": "LOW",
+        "cluster": "RULE_ENGINE",
+        "matches": [
+          "UPI transfer request detected",
+          "I am Sophia from London. I am sending you a gift package from UK but customs is ",
+          "This is cybercrime DSP from Bengaluru. Your email ID has been used to send threa",
+          "You have been selected as a premium customer. To unlock your exclusive benefits "
+        ],
+        "reasons": [
+          "Specific financial amount mentioned",
+          "Payment transfer method specified (UPI/NEFT/RTGS/crypto)",
+          "Mild escalation: tone shifted toward urgency",
+          "Unverified person requesting money with minimal relationship context",
+          "UPI transfer request detected",
+          "Risk Scores \u2014 ML: 0.82 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.35 [rel=0.50, money=0.35, esc=0.40, emo=0.00, ano=0.40]"
+        ],
+        "actions": [
+          "Verify the other party's identity through a separate, trusted channel.",
+          "Do NOT transfer any money based solely on this conversation.",
+          "Call back on a publicly listed / independently verified number.",
+          "If pressured, contact Cyber Crime Helpline: 1930 immediately."
+        ],
+        "provider": "CONVERSATION + RULES + ML"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 45,
+      "name": "EDGE_single_word_threats",
+      "category": "edge",
+      "subcategory": "minimal",
+      "explanation": "Extreme keyword stuffing in a terse message. Multiple rule hits in five words.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.74 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.18 [rel=0.50, money=0.00, esc=0.00, emo=0.30, ano=0.10]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.74 | Rules: 0.25 (eff: 0.25) | Vector: 0.00 | Conversation: 0.18 [rel=0.50, money=0.00, esc=0.00, emo=0.30, ano=0.10]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 48,
+      "name": "EDGE_police_real_request_for_statement",
+      "category": "edge",
+      "subcategory": "authority_legitimate",
+      "explanation": "Potentially real police request for witness statement. No money or OTP. SUSPICIOUS acceptable; SCAM would be a false positive.",
+      "expected_verdict": "SUSPICIOUS",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "MEDIUM",
+      "reasons": [
+        "No significant scam patterns detected across all analysis layers.",
+        "Risk Scores \u2014 ML: 0.88 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.29 [rel=1.00, money=0.00, esc=0.00, emo=0.00, ano=0.30]"
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "MEDIUM",
+        "cluster": "SAFE",
+        "matches": [],
+        "reasons": [
+          "No significant scam patterns detected across all analysis layers.",
+          "Risk Scores \u2014 ML: 0.88 | Rules: 0.00 (eff: 0.00) | Vector: 0.00 | Conversation: 0.29 [rel=1.00, money=0.00, esc=0.00, emo=0.00, ano=0.30]"
+        ],
+        "actions": [
+          "Proceed normally.",
+          "Stay vigilant for unverified requests or sudden urgency."
+        ],
+        "provider": "MULTI-LAYER ENGINE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    },
+    {
+      "id": 51,
+      "name": "EDGE_scammer_denies_being_scammer",
+      "category": "edge",
+      "subcategory": "denial_tactic",
+      "explanation": "Scammer explicitly denies being a scam. 'This is not a scam' + 'trust me' should trigger the denial-tactic amplifier in detector.py.",
+      "expected_verdict": "SCAM",
+      "expected_trend": "STABLE",
+      "predicted_verdict": "SAFE",
+      "predicted_trend": "UNKNOWN",
+      "predicted_confidence": "LOW",
+      "reasons": [
+        "Fatal system error."
+      ],
+      "raw_response": {
+        "verdict": "SAFE",
+        "confidence": "LOW",
+        "cluster": "UNKNOWN",
+        "matches": [],
+        "reasons": [
+          "Fatal system error."
+        ],
+        "actions": [
+          "Restart orchestration backend."
+        ],
+        "provider": "FAILSAFE"
+      },
+      "api_error": false,
+      "verdict_correct": false,
+      "trend_correct": false
+    }
+  ]
+}
