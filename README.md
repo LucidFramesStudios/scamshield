@@ -25,13 +25,13 @@ https://scamshieldai.vercel.app/ · [Architecture](#architecture) · [Validation
 We've packaged the entire stack into a single RAR file for judges who want to
 run the full local inference pipeline without any setup friction.
 
-**Prerequisite — Python 3.11** (stable, required for dependency compatibility):
+**Prerequisite -Python 3.11** (stable, required for dependency compatibility):
 
 ```bash
 # Check your version first
 python --version
 
-# If not 3.11, install it (Windows — via winget)
+# If not 3.11, install it (Windows -via winget)
 winget install Python.Python.3.11
 
 
@@ -41,9 +41,9 @@ winget install Python.Python.3.11
 
 1. Download and extract the RAR file from this repo
 2. Open the extracted folder
-3. Double-click **`scamshield.exe`** — it will install dependencies automatically
+3. Double-click **`scamshield.exe`** -it will install dependencies automatically
 4. A browser window opens with the full ScamShield UI (same as the screenshots above)
-5. Start typing or pasting a suspicious conversation — the full four-layer pipeline runs locally
+5. Start typing or pasting a suspicious conversation -the full four-layer pipeline runs locally
 
 No Render cold starts. No network dependency for layers 1–3. Full pipeline, on your machine.
 
@@ -82,8 +82,8 @@ flowchart TD
 ## The Problem
 
 In 2025, India received 32.4 Million cyber fraud complaints. 2.2 Billion Dollars lost.
-Digital arrest scams — where victims are held on continuous video calls by
-impersonators of CBI, TRAI, or RBI — averaged 1,654.23 US Dollar per victim.
+Digital arrest scams -where victims are held on continuous video calls by
+impersonators of CBI, TRAI, or RBI -averaged 1,654.23 US Dollar per victim.
 
 Awareness campaigns exist. They don't work at the moment of manipulation.
 The intervention has to be real-time, on-device, and low-friction enough
@@ -93,7 +93,7 @@ for a 70-year-old to use in a panic.
 
 ## What We Built
 
-ScamShield analyzes suspicious conversations — text, voice, or screenshots —
+ScamShield analyzes suspicious conversations -text, voice, or screenshots -
 and returns a structured verdict in under 2 seconds: **SCAM**, **SUSPICIOUS**,
 or **SAFE**, with the specific behavioral patterns that triggered it,
 in the user's language, with a one-tap path to the national cyber helpline (1930).
@@ -152,10 +152,10 @@ never leaves the device unless layers 1–3 are inconclusive), and resilience
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-<img width="250" height="1000" alt="diagram" src="https://github.com/user-attachments/assets/22f9eaac-f752-46be-b1f2-e117f4e75ed8" />
 
 
-**Design rationale**: Each layer is a gating function — not a retry. A case exits
+
+**Design rationale**: Each layer is a gating function -not a retry. A case exits
 the pipeline the moment a layer reaches threshold confidence. The result is that
 the majority of clear-cut scam patterns never touch the network. Layer 4 (Claude)
 handles only the genuinely ambiguous edge cases that deterministic methods cannot
@@ -163,7 +163,7 @@ resolve. This is a deliberate architectural boundary, not a cost optimisation.
 
 **On network dependency**: Layers 1–3 are fully local. Layer 4 uses the Claude API.
 Voice transcription uses a network-assisted STT service; the transcription layer
-is a modular input adapter — the inference stack above it is independent of
+is a modular input adapter -the inference stack above it is independent of
 how text arrives. A local STT engine (Whisper) can be substituted without
 changing the detection logic.
 
@@ -172,14 +172,14 @@ changing the detection logic.
 ## Validation
 
 We built a closed-loop testing framework rather than relying on manual assessment.
-Adversarial Test Harness — ScamShield v1
+Adversarial Test Harness -ScamShield v1
 Verdict accuracy  : 74.0%  (54/73 cases)
 False positive    : 1  (rate 3.1%)
 False negative    : 0  (rate 0.0%)
 Trend accuracy    : 90.4%
-System health    : ✗ NEEDS WORK (<75% accuracy — review patches)
+System health    : ✗ NEEDS WORK (<75% accuracy -review patches)
 
-**On the 74% accuracy figure**: This is adversarial accuracy — evaluated against
+**On the 74% accuracy figure**: This is adversarial accuracy -evaluated against
 synthetically hardened inputs designed to evade detection, not a representative
 field sample. The metric we optimise first is false negative rate (0.0%): a missed
 scam costs 1,654.23 US Dollar. A false alarm costs a two-minute verification call. That
@@ -195,9 +195,9 @@ targeted patch candidates; accuracy compounds with each iteration.
 | `test_runner.py` | Runs all cases against the live API with retry logic and structured result capture |
 | `evaluator.py` | Computes accuracy, FP/FN rates, trend accuracy, per-category breakdowns |
 | `improvement_engine.py` | Analyzes failures and generates targeted rule patches and classifier retraining suggestions automatically |
-| `run_history.json` | Tracks accuracy metrics across iterations — the system is measurably self-improving |
+| `run_history.json` | Tracks accuracy metrics across iterations -the system is measurably self-improving |
 
-The improvement engine means we don't manually review failures — we generate
+The improvement engine means we don't manually review failures -we generate
 structured patch candidates and apply them. This is the loop that compounds.
 
 ---
@@ -216,11 +216,11 @@ We stress-tested the system against its own failure modes before submission.
 
 **Failure philosophy**: There is no single point of catastrophic failure. Each
 layer degrades independently. A complete network outage leaves layers 1–3 intact,
-covering the majority of field cases. Uncertainty is always surfaced — never
+covering the majority of field cases. Uncertainty is always surfaced -never
 silently absorbed into a confident wrong verdict.
 
 The asymmetry is intentional: a false alarm costs two minutes. A missed scam
-costs ₹1,56,502. We weight the system accordingly.
+costs 1,654.23 US Dollar. We weight the system accordingly.
 
 ---
 
@@ -228,13 +228,13 @@ costs ₹1,56,502. We weight the system accordingly.
 
 ScamShield produces two artifacts per analysis:
 
-**Verdict Card** — returned in under 2 seconds:
+**Verdict Card** -returned in under 2 seconds:
 - SCAM / SUSPICIOUS / SAFE with confidence level
 - 2–3 specific behavioral patterns that triggered the verdict, in plain language
 - One-tap access to national cyber helpline: 1930
 - Available in Hindi, English
 
-**Incident Report** — generated on request:
+**Incident Report** -generated on request:
 - Caller number, transcript snippet, matched pattern, timestamp
 - Formatted for filing at cybercrime.gov.in or sharing with family
 
@@ -244,13 +244,13 @@ ScamShield produces two artifacts per analysis:
 
 These are scoped, not speculative:
 
-1. **Local STT** — swap network-assisted transcription for Whisper Tiny; requires
+1. **Local STT** -swap network-assisted transcription for Whisper Tiny; requires
    no changes to the inference stack; estimated 2–3 days of integration work
-2. **Vision pipeline** — WhatsApp screenshot → OCR → analysis; Layer 1 already
+2. **Vision pipeline** -WhatsApp screenshot → OCR → analysis; Layer 1 already
    handles the text; input adapter needs building
-3. **I4C database sync** — daily pull from the national scam pattern repository;
+3. **I4C database sync** -daily pull from the national scam pattern repository;
    feeds Layer 3 vector store; straightforward ETL work
-4. **Backend deployment** — currently local; containerisation and cloud deployment
+4. **Backend deployment** -currently local; containerisation and cloud deployment
    is standard infrastructure work, not architecture work
 
 ---
@@ -258,7 +258,7 @@ These are scoped, not speculative:
 ## Setup
 
 ScamShield runs in two modes. Local Full Inference is the real system.
-The hosted demo exists for access convenience only — the inference architecture
+The hosted demo exists for access convenience only -the inference architecture
 is identical in both cases.
 
 ### Deployment Modes
@@ -280,7 +280,7 @@ Because Render free-tier instances sleep when inactive, the first request may
 take several seconds while the inference server wakes up.
 
 The application handles this with backend wake-up detection, realtime loading
-stages, graceful retry handling, and degraded-mode recovery states — the
+stages, graceful retry handling, and degraded-mode recovery states -the
 interface never appears frozen.
 
 **Note**: The hosted demo is a proof-of-access layer. It does not reflect
@@ -293,7 +293,7 @@ production latency. For accurate performance evaluation, run locally.
 For accurate latency, full pipeline access, and on-device privacy:
 
 ```bash
-# Backend — inference stack
+# Backend -inference stack
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
@@ -325,7 +325,7 @@ python run_tests.py --eval-only
 
 <div align="center">
 
-Built at **AIC × Anthropic Claude Hackathon, IIT Bombay** — May 2026  
+Built at **AIC × Anthropic Claude Hackathon, IIT Bombay** -May 2026  
 Track: Governance & Collaboration
 
 </div>
