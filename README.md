@@ -48,36 +48,35 @@ where the LLM is the last resort, not the first.
 Input  ──────────────────────────────────────────────────────────▶  Verdict
 │
 ▼
-┌─────────────────────────────────────────────────────────────────┐
+ 
 │  Layer 1 · Rules Engine                                         │
 │  60+ compiled regex patterns · Hinglish-aware · <10ms · local   │
 │  Catches: forced call-retention, time-pressure, OTP demands,    │
 │  fake FIR formats, digital arrest terminology                   │
-└────────────────────────────┬────────────────────────────────────┘
+ 
 inconclusive │
 ▼
-┌─────────────────────────────────────────────────────────────────┐
+ 
 │  Layer 2 · ML Classifier                                        │
 │  TF-IDF + LogisticRegression · n-gram (1,3) · local            │
 │  STT noise correction · Hinglish normalization                  │
 │  Trained on adversarial + synthetic corpus                      │
-└────────────────────────────┬────────────────────────────────────┘
+ 
 inconclusive │
 ▼
-┌─────────────────────────────────────────────────────────────────┐
+ 
 │  Layer 3 · Semantic Vector Store                                │
 │  Sentence-Transformers embeddings · cosine similarity · local   │
 │  500+ verified scam pattern library · RAG retrieval             │
 │  Handles novel phrasing that rules and classifier miss          │
-└────────────────────────────┬────────────────────────────────────┘
+ 
 inconclusive │
-▼
-┌─────────────────────────────────────────────────────────────────┐
+ 
 │  Layer 4 · LLM Reasoning                                        │
 │  Claude API · handles genuinely ambiguous / novel cases         │
 │  Invoked only when layers 1–3 return low-confidence verdicts    │
 │  Has deterministic fallback if API unavailable                  │
-└────────────────────────────┬────────────────────────────────────┘
+ 
 │
 ▼
 Structured verdict + Incident Report
