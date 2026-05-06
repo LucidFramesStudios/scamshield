@@ -17,7 +17,7 @@ work at the moment of manipulation. A real-time tool does.
 ## What We Built
 
 A layered inference system that analyzes suspicious conversations and returns a
-verdict in under 2 seconds — with reasons, in the user's language, and a one-tap
+verdict in under 2 seconds - with reasons, in the user's language, and a one-tap
 path to the national cyber helpline (1930).
 
 This is not a chatbot wrapper. The LLM is layer four.
@@ -43,7 +43,7 @@ Text / Voice Input
 Verdict Card + Incident Report
 
 Each layer has a deterministic fallback. The first three layers operate without
-network connectivity. The transcription layer is a modular input adapter — 
+network connectivity. The transcription layer is a modular input adapter - 
 currently network-assisted, architected to accept a local STT engine.
 
 ---
@@ -52,8 +52,8 @@ currently network-assisted, architected to accept a local STT engine.
 
 We had 24 hours. We made deliberate tradeoffs.
 
-We prioritized the inference stack — the part that requires actual engineering
-judgment — over deployment polish and UI completeness. The evaluation infrastructure
+We prioritized the inference stack - the part that requires actual engineering
+judgment - over deployment polish and UI completeness. The evaluation infrastructure
 took real time to build. It is the asset that compounds.
 
 The alternative was a single LLM call dressed as a product. We chose not to do that.
